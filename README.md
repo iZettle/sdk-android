@@ -11,7 +11,7 @@ devices, <but also required to take payments?>.
 ### Step 1: Add a dependency
 
 First of all you need to add a dependency
-```groov
+```groovy
 maven {
     url = uri("https://maven.pkg.github.com/iZettle/sdk-android")
 }
