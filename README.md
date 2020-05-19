@@ -203,11 +203,12 @@ Card payment was successfully completed. Contains transaction info in `payload` 
 
 ### Step 7: Performing refund
 
-To perform a refund you first need to find a CardPayment that matches a given id provided in the `TransactionReference.Builder(internalTraceId)`. We then suggest showing this information in a screen for the user to confirm that everything is ok.
+
+To perform a refund you first need to find a CardPayment that matches a given id provided in the `TransactionReference.Builder(internalTraceId)`.
 
 ```kotlin
-IZettleSDK.refundsManager.retrieveCardPayment(internalTraceId, object : RefundsManager.Callback<CardPaymentPayload> {
-    override fun onFailure(error: RefundsManager.Error) {
+IZettleSDK.refundsManager.retrieveCardPayment(internalTraceId, object : RefundsManager.Callback<CardPaymentPayload, RetrieveCardPaymentFailureReason> {
+    override fun onFailure(reason: RetrieveCardPaymentFailureReason) {
         // ...
     }
 
@@ -217,27 +218,75 @@ IZettleSDK.refundsManager.retrieveCardPayment(internalTraceId, object : RefundsM
 })
 ```
 
-With this same `CardPaymentPayload` object you can call `refund`, where you can provide an amount that is equal to or less than the total amount of the payment. For security reasons your user will be prompted to confirm the current logged in password to proceed with the refund.
+First of all you need to create TransactionReference object using the builder provider since a refund is basically a transaction with negative value. 
+
+IMPORTANT: The transaction reference object must contain at least one unique field
 ```kotlin
-val toobarColor = ResourcesCompat.getColor(resources, R.color.colorAccent, null)
-IZettleSDK.refundsManager.refund(cardPaymentPayload, this, toobarColor, object : RefundsManager.Callback<RefundPayload> {
-
-    override fun onFailure(error: RefundsManager.Error) {
-        // ...
-    }
-
-    override fun onSuccess(result: RefundPayload) {
-        // ...
-    }
-})
+val internalTraceId = UUID.randomUUID().toString()
+val reference = TransactionReference.Builder(internalTraceId)
+    .put("REFUND_EXTRA_INFO", "Started from home screen")
+    .build()
 ```
 
-#### RefundsManager.Error
+In the constructor builder you must provide the CardPayment retrieved from previous step
 
-1. `RefundsManager.Error.NotAuthenticated` - There is no authorized user to process payment request
-2. `RefundsManager.Error.NotFound` - Payment with given reference id was not found
-3. `RefundsManager.Error.NotRefundable` - Payment is not refundable
-4. `RefundsManager.Error.NetworkError` - Communication with iZettle servers failed
-5. `RefundsManager.Error.BackendError` - Payment failed because of technical issues
-6. `RefundsManager.Error.AlreadyRefunded` - Payment was already refunded
-7. `RefundsManager.Error.AmountTooHigh` - Trying to perform refund with amount higher than original payment
+Using the `put` method you can add whatever you want to this object, but keep in mind that the total data size (including key names) in this object can't be bigger than 4 kilobytes. You will get this reference back with transaction data and can always request it back from our servers.
+
+Then you need to start RefundsActivity. To do so you may use our helper which creates configured `Intent` object
+```kotlin
+val intent = RefundsActivity.IntentBuilder(cardPaymentPayload)
+    // Refund amount in account currency
+    // This amount must be less or equals to the original card payment.
+    // If not provided it will use original card payment amount
+    .refundAmount(20000L)
+    // Reference object created in previous step        
+    .reference(reference)
+    // Optional, you can provide tax amount of this card payment to be displayed in the UI
+    .taxAmount(100L)
+    // Optional, you can provide receipt number of this card payment to be displayed in the UI
+    .receiptNumber("#12345")
+    .build()
+            
+// Start activity with the intent        
+startActivityForResult(intent, 0)
+```
+### Step 8: Processing refund result
+
+You will receive the payment result as activity result. Result `Bundle` contains two values:
+
+1.  `RefundsActivity.RESULT_EXTRA_REQUEST` contains all extras from request intent
+2.  `RefundsActivity.RESULT_EXTRA_PAYLOAD` contains refund result
+
+The payment result is an instance of one of the following classes:
+
+#### RefundResult.Canceled
+
+Refund was canceled by merchant. Doesn't contain any additional data
+
+#### RefundResult.Failed
+
+Refund failed. The failure reason is defined by reason field and be one of the following:
+
+1. `RefundFailureReason.Failed` - Failure due to unknown reasons
+2. `RefundFailureReason.NotAuthorized` - There is no authorized user to process payment request
+3. `RefundFailureReason.NotFound` - Payment with given reference id was not found
+4. `RRefundFailureReason.NotRefundable` - Payment is not refundable
+5. `RefundFailureReason.NetworkError` - Communication with iZettle servers failed
+6. `RefundFailureReason.TechnicalError` - Payment failed because of technical issues
+7. `RefundFailureReason.AlreadyRefunded` - Payment was already refunded
+8. `RefundFailureReason.AmountTooHigh` - Trying to perform refund with amount higher than original payment
+9. `RefundFailureReason.RefundExpired` - Payment refund is too old to be refunded
+10. `RefundFailureReason.InsufficientFunds` - Account has no sufficient funds to perform refund
+11. `RefundFailureReason.PartialRefundNotSupported` - Partial refund is not allowed for this payment
+
+#### RefundResult.Completed
+
+Card payment was successfully completed. Contains transaction info in `payload` field.
+
+* `originalAmount` - Total original card payment amount (also includes tip amount if applicable)
+* `cardType` - card brand: VISA, MASTERCARD and so on
+* `cardIssuingBank` - card issuing bank if provided
+* `maskedPan` - e.g. "**** **** **** 1111"
+* `reference` - your reference object
+
+<I'll add payload description later when we will decide what should be public>
