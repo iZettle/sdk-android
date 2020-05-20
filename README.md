@@ -1,4 +1,6 @@
-## Getting started with Card Payments SDK
+![andriod:4.4+](https://img.shields.io/badge/android-4.4%2B-green?style=flat)
+
+## Getting started with iZettle Payments SDK for Android
 
 ### Intro
 
@@ -6,7 +8,7 @@
 all examples in this HOWTO are written in Kotlin and Kotlin is the preferred language for the host app.
 
 `SDK` requires location permission to function properly. It's mostly needed to scan and connect bluetooth low energy
-devices, <but also required to take payments?>.
+devices.
 
 ### Step 1: Add a dependency
 
@@ -115,7 +117,16 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
     
 ```
-<I'll add User.AuthState.LoggedIn description later when we will decide which info we will share with integrators>
+
+User.AuthState.LoggedIn has `info` object with usable fields.
+
+* `publicName` - public company or merchant public name
+* `imageUrl` - profile image in small, medium and large size
+* `userId` - unique user id. can be used to join iZettle user and your data for it
+* `organizationId` - unique organisation id
+* `timeZone` - merchant time zone
+* `country` - merchant country
+* `currency` - currency used for all payments & refunds
 
 Authorizing a user is fairly simple. Just call login method from your Activity and provide a toolbar color compatible with
 your color theme.
@@ -198,8 +209,6 @@ Card payment was successfully completed. Contains transaction info in `payload` 
 * `mxFiid`
 * `mxCardType`
 * `reference` - your reference object
-
-<I'll add payload description later when we will decide what should be public>
 
 ### Step 7: Performing refund
 
@@ -288,5 +297,3 @@ Card payment was successfully completed. Contains transaction info in `payload` 
 * `cardIssuingBank` - card issuing bank if provided
 * `maskedPan` - e.g. "**** **** **** 1111"
 * `reference` - your reference object
-
-<I'll add payload description later when we will decide what should be public>
