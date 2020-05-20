@@ -128,7 +128,7 @@ User.AuthState.LoggedIn has `info` object with usable fields.
 * `country` - merchant country
 * `currency` - currency used for all payments & refunds
 
-Authorizing a user is fairly simple. Just call login method from your Activity and provide a toolbar color compatible with
+Authorizing a user is simple. Just call login method from your Activity and provide a toolbar color compatible with
 your color theme.
 ```kotlin
 private fun doLogin() {
@@ -138,7 +138,7 @@ private fun doLogin() {
 
 ### Step 5: Starting payment
 
-First of all you need to create TransactionReference object using the builder provided.
+First of all you need to create a TransactionReference object using the builder provided.
 
 IMPORTANT: The transaction reference object must contain at least one unique field
 ```kotlin
@@ -167,7 +167,7 @@ startActivityForResult(intent, 0)
 ```
 ### Step 6: Processing payment result
 
-You will receive the payment result as activity result. Result `Bundle` contains two values:
+You will receive the payment result as an activity result. Result `Bundle` contains two values:
 
 
 1.  `CardPaymentActivity.RESULT_EXTRA_REQUEST` contains all extras from request intent
@@ -177,7 +177,7 @@ The payment result is an instance of one of the following classes:
 
 #### CardPaymentResult.Canceled
 
-Payment was canceled by merchant or customer. Doesn't contain any additional data
+Payment was canceled by merchant or customer. Doesn't contain any additional data.
 
 #### CardPaymentResult.Failed
 
@@ -227,7 +227,7 @@ IZettleSDK.refundsManager.retrieveCardPayment(internalTraceId, object : RefundsM
 })
 ```
 
-First of all you need to create TransactionReference object using the builder provider since a refund is basically a transaction with negative value. 
+First of all you need to create a TransactionReference object using the builder provider since a refund is basically a transaction with negative value. 
 
 IMPORTANT: The transaction reference object must contain at least one unique field
 ```kotlin
@@ -245,14 +245,14 @@ Then you need to start RefundsActivity. To do so you may use our helper which cr
 ```kotlin
 val intent = RefundsActivity.IntentBuilder(cardPaymentPayload)
     // Refund amount in account currency
-    // This amount must be less or equals to the original card payment.
+    // This amount must be less or equal to the original card payment.
     // If not provided it will use original card payment amount
     .refundAmount(20000L)
     // Reference object created in previous step        
     .reference(reference)
     // Optional, you can provide tax amount of this card payment to be displayed in the UI
     .taxAmount(100L)
-    // Optional, you can provide receipt number of this card payment to be displayed in the UI
+    // Optional, you can provide the receipt number of this card payment to be displayed in the UI
     .receiptNumber("#12345")
     .build()
             
@@ -270,7 +270,7 @@ The payment result is an instance of one of the following classes:
 
 #### RefundResult.Canceled
 
-Refund was canceled by merchant. Doesn't contain any additional data
+Refund was canceled by merchant. Doesn't contain any additional data.
 
 #### RefundResult.Failed
 
@@ -285,7 +285,7 @@ Refund failed. The failure reason is defined by reason field and be one of the f
 7. `RefundFailureReason.AlreadyRefunded` - Payment was already refunded
 8. `RefundFailureReason.AmountTooHigh` - Trying to perform refund with amount higher than original payment
 9. `RefundFailureReason.RefundExpired` - Payment refund is too old to be refunded
-10. `RefundFailureReason.InsufficientFunds` - Account has no sufficient funds to perform refund
+10. `RefundFailureReason.InsufficientFunds` - Account does not have sufficient funds to perform refund
 11. `RefundFailureReason.PartialRefundNotSupported` - Partial refund is not allowed for this payment
 
 #### RefundResult.Completed
