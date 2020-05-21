@@ -46,8 +46,6 @@ you should do it, but don't forget to replace the redirect url data with your ow
 ```
 ### Step 3: Initialize SDK
 
-(here about obtaining oauth data)
-
 The best place to initialize `SDK` is your `Application` class. If you don't have one, we recommend that you create one.
 ```kotlin
 class MyApplication : Application() {
