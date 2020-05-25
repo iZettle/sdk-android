@@ -277,7 +277,7 @@ Refund failed. The failure reason is defined by reason field and be one of the f
 1. `RefundFailureReason.Failed` - Failure due to unknown reasons
 2. `RefundFailureReason.NotAuthorized` - There is no authorized user to process payment request
 3. `RefundFailureReason.NotFound` - Payment with given reference id was not found
-4. `RRefundFailureReason.NotRefundable` - Payment is not refundable
+4. `RefundFailureReason.NotRefundable` - Payment is not refundable
 5. `RefundFailureReason.NetworkError` - Communication with iZettle servers failed
 6. `RefundFailureReason.TechnicalError` - Payment failed because of technical issues
 7. `RefundFailureReason.AlreadyRefunded` - Payment was already refunded
