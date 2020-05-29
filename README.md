@@ -16,6 +16,13 @@ First of all you need to add a dependency
 ```groovy
 maven {
     url = uri("https://maven.pkg.github.com/iZettle/sdk-android")
+    credentials(HttpHeaderCredentials) {
+        name "Authorization"
+        value "Bearer <Your GitHub Token>" // More about auth tokens https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
+    }
+    authentication {
+        header(HttpHeaderAuthentication)
+    }
 }
 
 dependencies {
