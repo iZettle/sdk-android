@@ -1,0 +1,13 @@
+//    iZettle SDK
+//
+//    githubAccessToken - Personal access token with read rights to github package registry
+//    clientId - Auto generated client id from developer portal for this application
+//    redirectUrlScheme - OAuth redirect url scheme set on developer portal for this application
+//    redirectUrlHost - OAuth redirect url scheme set on developer portal for this application
+
+ext.iZettleSDK = [:]
+
+ext.iZettleSDK.githubAccessToken = ""
+ext.iZettleSDK.clientId = ""
+ext.iZettleSDK.redirectUrlScheme = ""
+ext.iZettleSDK.redirectUrlHost = ""
