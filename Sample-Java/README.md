@@ -1,5 +1,7 @@
 ## iZettleSDK java sample
 
+First of all you must fill the <b>iZettleSDK.gradle</b> file with your own data to be able to build. 
+
 ```gradle
 
 // Personal access token with read rights to github package registry
