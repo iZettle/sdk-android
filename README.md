@@ -4,11 +4,22 @@
 
 ### Intro
 
-`SDK` is compatible with apps supporting Android API level 19 and above. `SDK` itself is written in Kotlin that's why
-all examples in this HOWTO are written in Kotlin and Kotlin is the preferred language for the host app.
+The `SDK` is compatible with apps supporting Android API level 19 and above. The `SDK` itself is written in Kotlin which is the preferred language, however, we provide examples both in Kotlin and in Java.
 
-`SDK` requires location permission to function properly. It's mostly needed to scan and connect bluetooth low energy
-devices.
+The `SDK` requires location permission to function properly. It is needed to scan and connect Bluetooth devices, in this case, the iZettle Readers. During the integration process, you will be required to present your Github access token and your oAuth credentials. It is best to have these in advance. 
+
+### Generating your Github token 
+1. Click on your profile picture in Github.
+2. Go to Settings. 
+3. Click on Developer Settings
+4. Select Personal access token and Generate personal access token 
+5. Select the scope read:packages and generate your token.
+
+### Finding your oAuth credentials 
+1. Go to https://developer.izettle.com/ 
+2. Create your account and enter the information. 
+3. When you’ve completed the steps you will see your oAuth credentials in the iZettle Developer Portal.
+
 
 ### Step 1: Add a dependency
 
