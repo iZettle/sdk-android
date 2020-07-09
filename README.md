@@ -37,7 +37,7 @@ maven {
 }
 
 dependencies {
-    implementation 'com.izettle.payments:android-sdk-ui:1.5.4'
+    implementation 'com.izettle.payments:android-sdk-ui:1.5.5'
 }
 ```
 
@@ -214,16 +214,17 @@ Card payment was successfully completed. Contains transaction info in `payload` 
 * `gratuityAmount` - Contains total tip amount if tipping is performed, `null` otherwise
 * `cardType` - card brand: VISA, MASTERCARD and so on
 * `cardPaymentEntryMode` - EMV, CONTACTLESS_EMV, MAGSTRIPE_CONTACTLESS, MAGSTRIPE etc. More entry modes might be added independent of SDK version
-* `tsi`
-* `tvr`
+* `tsi` - EMV tags
+* `tvr` - EMV tags
+* `applicationIdentifier` - EMV tags (aid)
 * `cardIssuingBank` - card issuing bank if provided
 * `maskedPan` - e.g. "**** **** **** 1111"
 * `applicationName`
 * `authorizationCode`
-* `installmentAmount`
-* `nrOfInstallments`
-* `mxFiid`
-* `mxCardType`
+* `installmentAmount` - Value of each installment
+* `nrOfInstallments` - Number of installment chosen 
+* `mxFiid` - Mexico specific data
+* `mxCardType` - Mexico specific data
 * `reference` - your reference object
 
 ### Step 7: Performing refund
