@@ -9,17 +9,21 @@ The `SDK` is compatible with apps supporting Android API level 19 and above. The
 The `SDK` requires location permission to function properly. It is needed to scan and connect Bluetooth devices, in this case, the iZettle Readers. During the integration process, you will be required to present your Github access token and your oAuth credentials. It is best to have these in advance. 
 
 ### Generating your Github token 
-1. Click on your profile picture in Github.
-2. Go to Settings. 
+1. Click on your profile picture in Github
+2. Go to Settings
 3. Click on Developer Settings
-4. Select Personal access token and Generate personal access token 
-5. Select the scope read:packages and generate your token.
+4. Select Personal access token and Generate a new token
+5. Select the scope read:packages and generate your token
 
-### Finding your oAuth credentials 
-1. Go to https://developer.izettle.com/ 
-2. Create your account and enter the information. 
-3. When you’ve completed the steps you will see your oAuth credentials in the iZettle Developer Portal.
+### Generating OAuth credentials for your app
 
+User authorization in the SDK is perfomed through the implementation of OAuth 2.0. This means that the SDK requires Client ID and a Redirect URI from your integrating app.
+
+To obtain Client ID, create an account in the iZettle Developer Portal and create an Android SDK developer application by completing the following steps:
+1. Go to https://developer.izettle.com/register and create an account
+2. Verify your email address to be able to create new apps
+3. Create a new app from the Dashboard and choose _Payments SDK for Android_ option
+4. Once you submitted the form, you'll be given a Client ID which can be used to initialize the SDK
 
 ### Step 1: Add a dependency
 
@@ -115,7 +119,7 @@ override fun onStop() {
     IZettleSDK.user.state.removeObserver(authObserver)
 }
 ```
-Or you can user `LiveData` and `Observer` from AndroidX
+Or you can use `LiveData` and `Observer` from AndroidX
 ```kotlin
 private val authObserver = Observer<User.AuthState> {
     when (state) {
@@ -148,7 +152,7 @@ Authorizing a user is simple. Just call login method from your Activity and prov
 your color theme.
 ```kotlin
 private fun doLogin() {
-    ZettleSDK.user.login(this, ResourcesCompat.getColor(resources, R.color.colorAccent, null))
+    IZettleSDK.user.login(this, ResourcesCompat.getColor(resources, R.color.colorAccent, null))
 }
 ```
 
