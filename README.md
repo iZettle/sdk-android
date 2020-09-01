@@ -184,12 +184,18 @@ Using the `put` method you can add whatever you want to this object, but keep in
 Then you need to start CardPaymentActivity. To do so you may use our helper which creates configured `Intent` object
 ```kotlin
 val intent = CardPaymentActivity.IntentBuilder(this)
-    // Transaction amount in account currency 
+    // MANDATORY: Transaction amount in account currency 
     .amount(20000L)
-    // Reference object created in previous step        
+    // MANDATORY, Reference object created in previous step        
     .reference(reference)
-    // Optional, you can enable tipping (disabled by default)         
+    // MANDATORY, you can enable login prompt in the payment flow if user is not yet logged-in
+    .enableLogin(enableLogin)
+    // OPTIONAL, you can enable tipping (disabled by default)       
+    // This option will only work for markets with tipping support
     .enableTipping(true)
+    // OPTIONAL, you can enable installments (enabled by default)
+    // This option will only work for markets with installments support
+    .enableInstalments(enableInstallments)
     .build()
             
 // Start activity with the intent        
