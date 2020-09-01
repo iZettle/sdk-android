@@ -45,6 +45,16 @@ dependencies {
 }
 ```
 
+Also you may face some conflicts in the .kotlin_module META-INF, so we suggest to exclude META-INF by adding
+
+```groovy
+android {
+    packagingOptions {
+        exclude 'META-INF/*.kotlin_module'
+    }
+}
+```
+
 We are using AndroidX in some libraries so you will get them as dependencies as well.
 
 ### Step 2: Configure your app
