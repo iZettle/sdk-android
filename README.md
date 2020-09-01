@@ -318,3 +318,12 @@ Card payment was successfully completed. Contains transaction info in `payload` 
 * `cardIssuingBank` - card issuing bank if provided
 * `maskedPan` - e.g. "**** **** **** 1111"
 * `reference` - your reference object
+
+### Open card reader settings
+
+If you would like to provide a way to access a card reader settings from outside the payment flow you can use the following static method to get the intent.
+
+```kotlin
+val intent = CardReadersActivity.newIntent(context)
+startActivity(intent)
+```
