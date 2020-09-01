@@ -1,18 +1,15 @@
 package com.izettle.payments.android.kotlin_sample
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.izettle.payments.android.architecturecomponents.toLiveData
-import com.izettle.payments.android.kotlin_sample.MainActivity
+import com.izettle.android.commons.ext.state.toLiveData
 import com.izettle.payments.android.payment.TransactionReference
 import com.izettle.payments.android.payment.refunds.CardPaymentPayload
 import com.izettle.payments.android.payment.refunds.RefundsManager
@@ -30,6 +27,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var loginStateText: TextView
     private lateinit var loginButton: Button
     private lateinit var logoutButton: Button
     private lateinit var chargeButton: Button
@@ -37,11 +35,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var settingsButton: Button
     private lateinit var amountEditText: EditText
     private lateinit var tippingCheckBox: CheckBox
+    private lateinit var installmentsCheckBox: CheckBox
+    private lateinit var loginCheckBox: CheckBox
     private lateinit var lastPaymentTraceId: MutableLiveData<String?>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        loginStateText = findViewById(R.id.login_state)
         loginButton = findViewById(R.id.login_btn)
         logoutButton = findViewById(R.id.logout_btn)
         chargeButton = findViewById(R.id.charge_btn)
@@ -49,6 +50,8 @@ class MainActivity : AppCompatActivity() {
         settingsButton = findViewById(R.id.settings_btn)
         amountEditText = findViewById(R.id.amount_input)
         tippingCheckBox = findViewById(R.id.tipping_check_box)
+        loginCheckBox = findViewById(R.id.login_check_box)
+        installmentsCheckBox = findViewById(R.id.installments_check_box)
         lastPaymentTraceId = MutableLiveData(null)
 
         user.state.toLiveData().observe(this, Observer { authState: User.AuthState? ->
@@ -90,19 +93,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun onUserAuthStateChanged(isLoggedIn: Boolean) {
+        loginStateText.text = "State: ${if (isLoggedIn) "Authenticated" else "Unauthenticated"}"
         loginButton.isEnabled = !isLoggedIn
         logoutButton.isEnabled = isLoggedIn
-        chargeButton.isEnabled = isLoggedIn
-        refundButton.isEnabled = isLoggedIn && lastPaymentTraceId.value != null
-        settingsButton.isEnabled = isLoggedIn
-        amountEditText.isEnabled = isLoggedIn
-        tippingCheckBox.isEnabled = isLoggedIn
     }
 
     private fun onLoginClicked() {
-        val toolbarColor = ResourcesCompat.getColor(resources, R.color.white, theme)
-        user.login(this, toolbarColor)
+        user.login(this)
     }
 
     private fun onLogoutClicked() {
@@ -117,14 +116,20 @@ class MainActivity : AppCompatActivity() {
         val internalTraceId = UUID.randomUUID().toString()
         val amount = amountEditTextContent.toLong()
         val enableTipping = tippingCheckBox.isChecked
+        val enableInstallments = installmentsCheckBox.isChecked
+        val enableLogin = loginCheckBox.isChecked
         val reference = TransactionReference.Builder(internalTraceId)
                 .put("PAYMENT_EXTRA_INFO", "Started from home screen")
                 .build()
+
         val intent = CardPaymentActivity.IntentBuilder(this)
                 .amount(amount)
                 .reference(reference)
-                .enableTipping(enableTipping)
+                .enableTipping(enableTipping) // Only for markets with tipping support
+                .enableInstalments(enableInstallments) // Only for markets with installments support
+                .enableLogin(enableLogin) // Mandatory to set
                 .build()
+
         startActivityForResult(intent, REQUEST_CODE_PAYMENT)
         lastPaymentTraceId.value = internalTraceId
     }

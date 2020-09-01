@@ -3,19 +3,17 @@ package com.izettle.payments.android.java_sample;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.izettle.payments.android.core.StateObserver;
 import com.izettle.payments.android.payment.TransactionReference;
 import com.izettle.payments.android.payment.refunds.CardPaymentPayload;
 import com.izettle.payments.android.payment.refunds.RefundsManager;
@@ -30,13 +28,14 @@ import com.izettle.payments.android.ui.refunds.RefundsActivity;
 
 import java.util.UUID;
 
-import static com.izettle.payments.android.architecturecomponents.HelpersKt.toLiveData;
+import static com.izettle.android.commons.ext.state.StateExtKt.toLiveData;
 
 public class MainActivity extends AppCompatActivity {
 
     private static int REQUEST_CODE_PAYMENT = 1001;
     private static int REQUEST_CODE_REFUND = 1002;
 
+    private TextView loginStateText;
     private Button loginButton;
     private Button logoutButton;
     private Button chargeButton;
@@ -44,13 +43,15 @@ public class MainActivity extends AppCompatActivity {
     private Button settingsButton;
     private EditText amountEditText;
     private CheckBox tippingCheckBox;
+    private CheckBox loginCheckBox;
+    private CheckBox installmentsCheckBox;
     private MutableLiveData<String> lastPaymentTraceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        loginStateText = findViewById(R.id.login_state);
         loginButton = findViewById(R.id.login_btn);
         logoutButton = findViewById(R.id.logout_btn);
         chargeButton = findViewById(R.id.charge_btn);
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         settingsButton = findViewById(R.id.settings_btn);
         amountEditText = findViewById(R.id.amount_input);
         tippingCheckBox = findViewById(R.id.tipping_check_box);
+        loginCheckBox = findViewById(R.id.login_check_box);
+        installmentsCheckBox = findViewById(R.id.installments_check_box);
         lastPaymentTraceId = new MutableLiveData<>(null);
 
         toLiveData(IZettleSDK.Instance.getUser().getState()).observe(this, authState -> {
@@ -101,19 +104,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void onUserAuthStateChanged(boolean isLoggedIn) {
+        loginStateText.setText("State: " + (isLoggedIn ? "Authenticated" : "Unauthenticated"));
         loginButton.setEnabled(!isLoggedIn);
-        logoutButton.setEnabled(isLoggedIn);
-        chargeButton.setEnabled(isLoggedIn);
-        refundButton.setEnabled(isLoggedIn && lastPaymentTraceId.getValue() != null);
-        settingsButton.setEnabled(isLoggedIn);
-        amountEditText.setEnabled(isLoggedIn);
-        tippingCheckBox.setEnabled(isLoggedIn);
+        logoutButton.setEnabled( isLoggedIn);
     }
 
     private void onLoginClicked() {
-        int toolbarColor = ResourcesCompat.getColor(getResources(), R.color.white, getTheme());
-        IZettleSDK.Instance.getUser().login(this, toolbarColor);
+        IZettleSDK.Instance.getUser().login(this);
     }
 
     private void onLogoutClicked() {
@@ -129,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
         String internalTraceId = UUID.randomUUID().toString();
         long amount = Long.parseLong(amountEditTextContent);
         boolean enableTipping = tippingCheckBox.isChecked();
+        boolean enableInstallments = installmentsCheckBox.isChecked();
+        boolean enableLogin = loginCheckBox.isChecked();
 
         TransactionReference reference = new TransactionReference.Builder(internalTraceId)
                 .put("PAYMENT_EXTRA_INFO", "Started from home screen")
@@ -137,7 +138,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new CardPaymentActivity.IntentBuilder(this)
                 .amount(amount)
                 .reference(reference)
-                .enableTipping(enableTipping)
+                .enableTipping(enableTipping) // Only for markets with tipping support
+                .enableInstalments(enableInstallments) // Only for markets with installments support
+                .enableLogin(enableLogin) // Mandatory to set
                 .build();
 
         startActivityForResult(intent, REQUEST_CODE_PAYMENT);
