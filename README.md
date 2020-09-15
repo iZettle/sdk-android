@@ -132,7 +132,7 @@ override fun onStop() {
 Or you can use `LiveData` and `Observer` from AndroidX
 ```kotlin
 private val authObserver = Observer<User.AuthState> {
-    when (state) {
+    when (it) {
         is User.AuthState.LoggedIn -> // User authorized
         is User.AuthState.LoggedOut -> // There is no authorized use
     }
