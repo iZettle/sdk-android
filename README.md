@@ -119,7 +119,7 @@ And then subscribe to user state
 ```kotlin
 fun onStart() {
     super.onStart()    
-    IZettleSDK.user.state.observe(authObserver)
+    IZettleSDK.user.state.addObserver(authObserver)
 }
 ```
 And unsubscribe if you need to
