@@ -41,7 +41,7 @@ maven {
 }
 
 dependencies {
-    implementation 'com.izettle.payments:android-sdk-ui:1.8.4'
+    implementation 'com.izettle.payments:android-sdk-ui:1.8.8'
 }
 ```
 
