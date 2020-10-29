@@ -239,6 +239,7 @@ Card payment was successfully completed. Contains transaction info in `payload` 
 * `applicationIdentifier` - EMV tags (aid)
 * `cardIssuingBank` - card issuing bank if provided
 * `maskedPan` - e.g. "**** **** **** 1111"
+* `panHash` - Card pan hash
 * `applicationName`
 * `authorizationCode`
 * `installmentAmount` - Value of each installment
