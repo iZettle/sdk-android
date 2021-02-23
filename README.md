@@ -344,3 +344,6 @@ If you would like to provide a way to access a card reader settings from outside
 val intent = CardReadersActivity.newIntent(context)
 startActivity(intent)
 ```
+
+## Get help
+Contact our [Integrations team](mailto:sdk@zettle.com) for more information.
