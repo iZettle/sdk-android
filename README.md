@@ -17,10 +17,10 @@ The `SDK` requires location permission to function properly. It is needed to sca
 
 ### Generating OAuth credentials for your app
 
-User authorization in the SDK is perfomed through the implementation of OAuth 2.0. This means that the SDK requires Client ID and a Redirect URI from your integrating app.
+User authorization in the SDK is performed through the implementation of OAuth 2.0. This means that the SDK requires Client ID and a Redirect URI from your integrating app.
 
 To obtain Client ID, create an account in the iZettle Developer Portal and create an Android SDK developer application by completing the following steps:
-1. Go to https://developer.izettle.com/register and create an account
+1. Go to https://developer.zettle.com/register and create an account
 2. Verify your email address to be able to create new apps
 3. Create a new app from the Dashboard and choose _Payments SDK for Android_ option
 4. Once you submitted the form, you'll be given a Client ID which can be used to initialize the SDK
