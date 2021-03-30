@@ -1,12 +1,12 @@
 ![andriod:4.4+](https://img.shields.io/badge/android-4.4%2B-green?style=flat)
 
-## Getting started with iZettle Payments SDK for Android
+## Getting started with Zettle Payments SDK for Android
 
 ### Intro
 
 The `SDK` is compatible with apps supporting Android API level 19 and above. The `SDK` itself is written in Kotlin which is the preferred language, however, we provide examples both in Kotlin and in Java.
 
-The `SDK` requires location permission to function properly. It is needed to scan and connect Bluetooth devices, in this case, the iZettle Readers. During the integration process, you will be required to present your Github access token and your oAuth credentials. It is best to have these in advance. 
+The `SDK` requires location permission to function properly. It is needed to scan and connect Bluetooth devices, in this case, the Zettle Readers. During the integration process, you will be required to present your Github access token and your oAuth credentials. It is best to have these in advance. 
 
 ### Generating your Github token 
 1. Click on your profile picture in Github
@@ -19,7 +19,7 @@ The `SDK` requires location permission to function properly. It is needed to sca
 
 User authorization in the SDK is performed through the implementation of OAuth 2.0. This means that the SDK requires Client ID and a Redirect URI from your integrating app.
 
-To obtain Client ID, create an account in the iZettle Developer Portal and create an Android SDK developer application by completing the following steps:
+To obtain Client ID, create an account in the Zettle Developer Portal and create an Android SDK developer application by completing the following steps:
 1. Go to https://developer.zettle.com/register and create an account
 2. Verify your email address to be able to create new apps
 3. Create a new app from the Dashboard and choose _Payments SDK for Android_ option
@@ -59,7 +59,7 @@ We are using AndroidX in some libraries so you will get them as dependencies as 
 
 ### Step 2: Configure your app
 
-To be able to login a user through iZettle you must add callback activity to your manifest. The snippet below shows how
+To be able to login a user through Zettle you must add callback activity to your manifest. The snippet below shows how
 you should do it, but don't forget to replace the redirect url data with your own in the intent filter.
 ```xml
 <activity 
@@ -318,7 +318,7 @@ Refund failed. The failure reason is defined by reason field and be one of the f
 2. `RefundFailureReason.NotAuthorized` - There is no authorized user to process payment request
 3. `RefundFailureReason.NotFound` - Payment with given reference id was not found
 4. `RefundFailureReason.NotRefundable` - Payment is not refundable
-5. `RefundFailureReason.NetworkError` - Communication with iZettle servers failed
+5. `RefundFailureReason.NetworkError` - Communication with Zettle servers failed
 6. `RefundFailureReason.TechnicalError` - Payment failed because of technical issues
 7. `RefundFailureReason.AlreadyRefunded` - Payment was already refunded
 8. `RefundFailureReason.AmountTooHigh` - Trying to perform refund with amount higher than original payment
