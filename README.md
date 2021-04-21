@@ -8,7 +8,7 @@ The `SDK` is compatible with apps supporting Android API level 19 and above. The
 
 The `SDK` requires location permission to function properly. It is needed to scan and connect Bluetooth devices, in this case, the Zettle Readers. During the integration process, you will be required to present your Github access token and your oAuth credentials. It is best to have these in advance. 
 
-Card payments with Zettle is currently accepted in the following available markets:
+Card payment with Zettle is currently supported in the following markets:
 
 -   United States
 -   United Kingdom
@@ -24,9 +24,9 @@ Card payments with Zettle is currently accepted in the following available marke
 -   Spain
 -   Netherlands
 
-You can integrate your Point of Sales (POS) with the `SDK` only for the available markets, no matter where you are located. 
+You can integrate your Point of Sales (POS) with the `SDK` only for the supported markets, no matter where you are located. 
 
-> **Note:** To test your integration with the `SDK`, you need to be located in one of the available markets to sign up for a merchant account and order a card reader.
+> **Note:** To test your integration with the `SDK`, you need to be located in one of the supported markets to be able to order a card reader.
 
 ### Generating your Github token 
 1. Click on your profile picture in Github
