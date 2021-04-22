@@ -12,17 +12,17 @@ Card payments with Zettle are currently supported in the following markets:
 
 -   United States
 -   United Kingdom
--   Norway
--   Denmark
--   France
 -   Sweden
 -   Brazil
+-   Norway
+-   Denmark
 -   Finland
 -   Germany
--   Italy
 -   Mexico
--   Spain
 -   Netherlands
+-   France
+-   Spain
+-   Italy
 
 You can integrate your Point of Sales (POS) with the `SDK` only for the supported markets, no matter where you are located. 
 
