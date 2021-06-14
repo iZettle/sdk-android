@@ -221,6 +221,15 @@ val intent = CardPaymentActivity.IntentBuilder(this)
 // Start activity with the intent        
 startActivityForResult(intent, 0)
 ```
+#### Note on tipping
+
+Setting `enableTipping` to the `true` does not guarantee that tipping flow will be displayed. This is because tipping is not supported by all accounts and all card readers. Tipping is only supported with the Zettle Card Reader. The function is introduced market by market. If card reader software doesn’t support tipping, users will be prompted to either skip tipping or update card reader software.
+
+Total tip amount is presented in `CardPaymentResult.Completed` completion with `gratuityAmount` property.
+
+For more information on the tipping flow, see [SDK tippping support documentation](Documentation/SDK_Tipping_Support_Documentation.md).
+
+
 ### Step 6: Processing payment result
 
 You will receive the payment result as an activity result. Result `Bundle` contains two values:
