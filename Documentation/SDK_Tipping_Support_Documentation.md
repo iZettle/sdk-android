@@ -35,9 +35,6 @@ Tipping will be made available on a market by market basis. The following market
 
 - [Zettle SDK tipping FAQ](#zettle-sdk-tipping-faq)
 - [Tipping flow on the Zettle card reader](Tipping_flow_on_the_Zettle_card_reader)
-- [Tipping flow on the Zettle card reader](/sdk-android/Documentation/Tipping_flow_on_the_Zettle_card_reader)
-- [Tipping flow on the Zettle card reader](/Documentation/Tipping_flow_on_the_Zettle_card_reader)
-- [Tipping flow on the Zettle card reader](https://github.com/iZettle/sdk-android/blob/update-tipping/Documentation/Tipping_flow_on_the_Zettle_card_reader)
 
 ## Zettle SDK tipping FAQ
 
