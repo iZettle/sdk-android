@@ -45,6 +45,19 @@ To obtain Client ID, create an account in the Zettle Developer Portal and create
 3. Create a new app from the Dashboard and choose _Payments SDK for Android_ option
 4. Once you submitted the form, you'll be given a Client ID which can be used to initialize the SDK
 
+### Proguard 
+
+If using ProGuard for code shrinking the following rules need to be added prior to SDK version 1.14.16
+
+```bash
+-keep class com.izettle.android.auth.dto.** { *; }
+-keep class com.izettle.android.auth.AuthUri { *; }
+-keep class com.izettle.android.auth.AuthUri$** { *; }
+-keep class org.spongycastle.** { *; }
+```
+
+
+
 ### Step 1: Add a dependency
 
 First of all you need to add a dependency
