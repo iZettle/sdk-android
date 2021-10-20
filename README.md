@@ -98,25 +98,26 @@ you should do it, but don't forget to replace the redirect url data with your ow
 ```
 ### Step 3: Initialize SDK
 
-The best place to initialize `SDK` is your `Application` class. If you don't have one, we recommend that you create one.
+The best place to initialize the `SDK` is in your `Application` class. If you don't have one, we recommend that you create one. 
+
+After initialization you need to start the SDK. Preferably this is done by adding an observer on behalf of the SDK, to the `ProcessLifecycleOwner`. This way the SDK will automatically start and stop itself. You can also handle it manually by calling `start()` and `stop()`.
+
 ```kotlin
 class MyApplication : Application() {
     
-    // ...
-        
     fun onCreate() {
         
         // Initialize SDK by your credentials    
-        IZettleSDK.init(this, <Client ID>, <Redirect URL>)
+        val sdk = IZettleSDK.init(this, <Client ID>, <Redirect URL>)
             
         // Attach SDK lifecycle observer to your lifecycle. It allows SDK to
         // manage bluetooth connection in a more graceful way                   
         ProcessLifecycleOwner.get().lifecycle.addObserver(SdkLifecycle(IZettleSDK))
-      
+        
+        // Alternatively, start the SDK manually, but remember to also stop it manually.
+        sdk.start()
     }    
-    
-        // ...    
-    
+    // ...
 }
 ```
 ### Step 4: Authorize user
