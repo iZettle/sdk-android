@@ -47,7 +47,7 @@ To obtain Client ID, create an account in the Zettle Developer Portal and create
 
 ### Proguard 
 
-If using ProGuard for code shrinking the following rules need to be added prior to SDK version 1.14.16
+If using ProGuard for code shrinking, you need to add the following rules prior to SDK version 1.14.16.
 
 ```bash
 -keep class com.izettle.android.auth.dto.** { *; }
