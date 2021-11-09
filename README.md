@@ -1,12 +1,10 @@
 ![andriod:4.4+](https://img.shields.io/badge/android-4.4%2B-green?style=flat)
 
-## Getting started with Zettle Payments SDK for Android
-
-### Intro
+# Getting started with Zettle Payments SDK for Android
 
 The `SDK` is compatible with apps supporting Android API level 19 and above. The `SDK` itself is written in Kotlin which is the preferred language, however, we provide examples both in Kotlin and in Java.
 
-The `SDK` requires location permission to function properly. It is needed to scan and connect Bluetooth devices, in this case, the Zettle Readers. During the integration process, you will be required to present your Github access token and your oAuth credentials. It is best to have these in advance. 
+The `SDK` requires location permission to function properly. It is needed to scan and connect Bluetooth devices, in this case, the Zettle Readers. During the integration process, you will be required to present your GitHub access token and your OAuth credentials. It is best to have these in advance. 
 
 Card payments with Zettle are currently supported in the following markets:
 
@@ -28,24 +26,24 @@ You can integrate your point of sale (POS) with the `SDK` only for the supported
 
 > **Note:** To test your integration with the `SDK`, you need to be located in one of the supported markets to be able to order a card reader.
 
-### Generating your Github token 
-1. Click on your profile picture in Github
-2. Go to Settings
-3. Click on Developer Settings
-4. Select Personal access token and Generate a new token
-5. Select the scope read:packages and generate your token
+## Generating your GitHub token 
+1. Click on your profile picture in GitHub.
+2. Go to Settings.
+3. Click on Developer Settings.
+4. Select Personal access token and Generate a new token.
+5. Select the scope read:packages and generate your token.
 
-### Generating OAuth credentials for your app
+## Generating OAuth credentials for your app
 
 User authorization in the SDK is performed through the implementation of OAuth 2.0. This means that the SDK requires Client ID and a Redirect URI from your integrating app.
 
 To obtain Client ID, create an account in the Zettle Developer Portal and create an Android SDK developer application by completing the following steps:
-1. Go to https://developer.zettle.com/register and create an account
-2. Verify your email address to be able to create new apps
-3. Create a new app from the Dashboard and choose _Payments SDK for Android_ option
-4. Once you submitted the form, you'll be given a Client ID which can be used to initialize the SDK
+1. Go to the [Developer Portal](https://developer.zettle.com/register "Register on the Zettle Developer Portal") and create an account.
+3. Verify your email address to be able to create new apps.
+4. Create a new app from the Dashboard and choose the **Payments SDK for Android** option.
+5. Once you submitted the form, you'll be given a Client ID which can be used to initialize the SDK.
 
-### Proguard 
+## Proguard 
 
 If using ProGuard for code shrinking, you need to add the following rules prior to SDK version 1.14.16.
 
@@ -58,9 +56,9 @@ If using ProGuard for code shrinking, you need to add the following rules prior 
 
 
 
-### Step 1: Add a dependency
+## Step 1: Add a dependency
 
-First of all you need to add a dependency
+First of all you need to add a dependency.
 ```groovy
 maven {
     url = uri("https://maven.pkg.github.com/iZettle/sdk-android")
@@ -90,7 +88,7 @@ android {
 
 We are using AndroidX in some libraries so you will get them as dependencies as well.
 
-### Step 2: Configure your app
+## Step 2: Configure your app
 
 To be able to login a user through Zettle you must add callback activity to your manifest. The snippet below shows how
 you should do it, but don't forget to replace the redirect url data with your own in the intent filter.
@@ -109,7 +107,7 @@ you should do it, but don't forget to replace the redirect url data with your ow
     </intent-filter>
 </activity>
 ```
-### Step 3: Initialize SDK
+## Step 3: Initialize SDK
 
 The best place to initialize the `SDK` is in your `Application` class. If you don't have one, we recommend that you create one. 
 
@@ -133,7 +131,7 @@ class MyApplication : Application() {
     // ...
 }
 ```
-### Step 4: Authorize user
+## Step 4: Authorize user
 
 Your application is responsible for user authorization. The SDK itself doesn't track auth state, but will return
 NotAuthorized errors if you try to take payments or make refunds without valid user authorization.
@@ -149,21 +147,21 @@ private val authObserver = object : StateObserver<User.AuthState> {
     }
 }
 ```
-And then subscribe to user state
+And then subscribe to user state:
 ```kotlin
 fun onStart() {
     super.onStart()    
     IZettleSDK.user.state.addObserver(authObserver)
 }
 ```
-And unsubscribe if you need to
+And unsubscribe if you need to:
 ```kotlin
 override fun onStop() {
     super.onStop()
     IZettleSDK.user.state.removeObserver(authObserver)
 }
 ```
-Or you can use `LiveData` and `Observer` from AndroidX
+Or you can use `LiveData` and `Observer` from AndroidX:
 ```kotlin
 private val authObserver = Observer<User.AuthState> {
     when (it) {
@@ -184,13 +182,13 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 User.AuthState.LoggedIn has `info` object with usable fields.
 
-* `publicName` - public company or merchant public name
-* `imageUrl` - profile image in small, medium and large size
-* `userId` - unique user id. can be used to join iZettle user and your data for it
-* `organizationId` - unique organisation id
-* `timeZone` - merchant time zone
-* `country` - merchant country
-* `currency` - currency used for all payments & refunds
+* `publicName`. The public company or merchant public name.
+* `imageUrl`. The profile image in small, medium and large size.
+* `userId`. The unique user ID. Can be used to join iZettle user and your data for it.
+* `organizationId`. The unique organisation ID.
+* `timeZone`. The merchant time zone.
+* `country`. The merchant country.
+* `currency`. The currency used for all payments and refunds.
 
 Authorizing a user is simple. Just call login method from your Activity and provide a toolbar color compatible with
 your color theme.
@@ -200,11 +198,11 @@ private fun doLogin() {
 }
 ```
 
-### Step 5: Starting payment
+## Step 5: Starting payment
 
 First of all you need to create a TransactionReference object using the builder provided.
 
-IMPORTANT: The transaction reference object must contain at least one unique field
+>**Important:** The transaction reference object must contain at least one unique field.
 ```kotlin
 val internalTraceId = UUID.randomUUID().toString()
 val reference = TransactionReference.Builder(internalTraceId)
@@ -215,7 +213,7 @@ In the constructor builder you can provide your own id with a maximum of 128 cha
 
 Using the `put` method you can add whatever you want to this object, but keep in mind that the total data size (including key names) in this object can't be bigger than 4 kilobytes. You will get this reference back with transaction data and can always request it back from our servers.
 
-Then you need to start CardPaymentActivity. To do so you may use our helper which creates configured `Intent` object
+Then you need to start `CardPaymentActivity`. To do so you may use our helper which creates configured `Intent` object.
 ```kotlin
 val intent = CardPaymentActivity.IntentBuilder(this)
     // MANDATORY: Transaction amount in account currency 
@@ -235,7 +233,7 @@ val intent = CardPaymentActivity.IntentBuilder(this)
 // Start activity with the intent        
 startActivityForResult(intent, 0)
 ```
-#### Note on tipping
+**Note on tipping**
 
 Setting `enableTipping` to `true` does not guarantee that tipping flow will be displayed. This is because tipping is not supported by all accounts and all card readers. Tipping is only supported with the Zettle Card Reader. The function is introduced market by market. If card reader software doesn’t support tipping, users will be prompted to either skip tipping or update card reader software.
 
@@ -244,15 +242,15 @@ Total tip amount is presented in `CardPaymentResult.Completed` completion with `
 For more information on the tipping flow, see [SDK tippping support documentation](Documentation/SDK_Tipping_Support_Documentation.md).
 
 
-### Step 6: Processing payment result
+## Step 6: Processing payment result
 
 You will receive the payment result as an activity result. Result `Bundle` contains two values:
 
 
-1.  `CardPaymentActivity.RESULT_EXTRA_REQUEST` contains all extras from request intent
-2.  `CardPaymentActivity.RESULT_EXTRA_PAYLOAD` contains payment result
+1.  `CardPaymentActivity.RESULT_EXTRA_REQUEST` contains all extras from request intent.
+2.  `CardPaymentActivity.RESULT_EXTRA_PAYLOAD` contains payment result.
 
-The payment result is an instance of one of the following classes:
+The payment result is an instance of one of the classes listed in the following.
 
 #### CardPaymentResult.Canceled
 
@@ -262,39 +260,39 @@ Payment was canceled by merchant or customer. Doesn't contain any additional dat
 
 Payment failed. The failure reason is defined by reason field and be one of the following:
 
-1. `FailureReason.TechnicalError` - payment failed because of technical issues. Can happen because of bluetooth
-   communication problem or other technical issue
-2. `FailureReason.NetworkError` - Communication with iZettle servers failed
-3. `FailureReason.NotAuthorized` - There is no authorized user to process payment request
-4. `FailureReason.AboveMaximum` - Requested amount is greater than account limit
-5. `FailureReason.BellowMinimum` - Requested amount is smaller than allowed minimum
+1. `FailureReason.TechnicalError`. Payment failed because of technical issues. Can happen because of Bluetooth
+   communication problem or other technical issues.
+2. `FailureReason.NetworkError`. Communication with iZettle servers failed.
+3. `FailureReason.NotAuthorized`. There is no authorized user to process payment request.
+4. `FailureReason.AboveMaximum`. The requested amount is greater than account limit.
+5. `FailureReason.BelowMinimum`. The requested amount is smaller than allowed minimum.
 
 #### CardPaymentResult.Completed
 
 Card payment was successfully completed. Contains transaction info in `payload` field.
 
-* `amount` - Total transaction amount (also includes tip amount if applicable)
-* `gratuityAmount` - Contains total tip amount if tipping is performed, `null` otherwise
-* `cardType` - card brand: VISA, MASTERCARD and so on
-* `cardPaymentEntryMode` - EMV, CONTACTLESS_EMV, MAGSTRIPE_CONTACTLESS, MAGSTRIPE etc. More entry modes might be added independent of SDK version
-* `tsi` - EMV tags
-* `tvr` - EMV tags
-* `applicationIdentifier` - EMV tags (aid)
-* `cardIssuingBank` - card issuing bank if provided
-* `maskedPan` - e.g. "**** **** **** 1111"
-* `panHash` - Card pan hash
+* `amount`. Total transaction amount (also includes tip amount if applicable).
+* `gratuityAmount`. Contains total tip amount if tipping is performed, `null` otherwise.
+* `cardType`. Card brand: VISA, MASTERCARD and so on.
+* `cardPaymentEntryMode`. EMV, CONTACTLESS_EMV, MAGSTRIPE_CONTACTLESS, MAGSTRIPE etc. More entry modes might be added independent of SDK version.
+* `tsi`. EMV tags.
+* `tvr`. EMV tags.
+* `applicationIdentifier`. EMV tags (aid).
+* `cardIssuingBank`. Card issuing bank if provided.
+* `maskedPan`. For example "**** **** **** 1111"
+* `panHash`. Card pan hash.
 * `applicationName`
 * `authorizationCode`
-* `installmentAmount` - Value of each installment
-* `nrOfInstallments` - Number of installment chosen 
-* `mxFiid` - Mexico specific data
-* `mxCardType` - Mexico specific data
-* `reference` - your reference object
+* `installmentAmount`. Value of each installment.
+* `nrOfInstallments`. Number of installment chosen.
+* `mxFiid`. Mexico-specific data.
+* `mxCardType`. Mexico-specific data.
+* `reference`. Your reference object.
 
-### Step 7: Performing refund
+## Step 7: Performing refund
 
 
-To perform a refund you first need to find a CardPayment that matches a given id provided in the `TransactionReference.Builder(internalTraceId)`.
+To perform a refund you first need to find a CardPayment that matches a given ID provided in the `TransactionReference.Builder(internalTraceId)`.
 
 ```kotlin
 IZettleSDK.refundsManager.retrieveCardPayment(internalTraceId, object : RefundsManager.Callback<CardPaymentPayload, RetrieveCardPaymentFailureReason> {
@@ -310,7 +308,7 @@ IZettleSDK.refundsManager.retrieveCardPayment(internalTraceId, object : RefundsM
 
 First of all you need to create a TransactionReference object using the builder provider since a refund is basically a transaction with negative value. 
 
-IMPORTANT: The transaction reference object must contain at least one unique field
+>**IMPORTANT:** The transaction reference object must contain at least one unique field
 ```kotlin
 val internalTraceId = UUID.randomUUID().toString()
 val reference = TransactionReference.Builder(internalTraceId)
@@ -318,11 +316,11 @@ val reference = TransactionReference.Builder(internalTraceId)
     .build()
 ```
 
-In the constructor builder you must provide the CardPayment retrieved from previous step
+In the constructor builder you must provide the CardPayment retrieved from previous step.
 
 Using the `put` method you can add whatever you want to this object, but keep in mind that the total data size (including key names) in this object can't be bigger than 4 kilobytes. You will get this reference back with transaction data and can always request it back from our servers.
 
-Then you need to start RefundsActivity. To do so you may use our helper which creates configured `Intent` object
+Then you need to start RefundsActivity. To do so you may use our helper which creates configured `Intent` object.
 ```kotlin
 val intent = RefundsActivity.IntentBuilder(cardPaymentPayload)
     // Refund amount in account currency
@@ -340,14 +338,14 @@ val intent = RefundsActivity.IntentBuilder(cardPaymentPayload)
 // Start activity with the intent        
 startActivityForResult(intent, 0)
 ```
-### Step 8: Processing refund result
+## Step 8: Processing refund result
 
 You will receive the payment result as activity result. Result `Bundle` contains two values:
 
-1.  `RefundsActivity.RESULT_EXTRA_REQUEST` contains all extras from request intent
-2.  `RefundsActivity.RESULT_EXTRA_PAYLOAD` contains refund result
+1.  `RefundsActivity.RESULT_EXTRA_REQUEST` contains all extras from request intent.
+2.  `RefundsActivity.RESULT_EXTRA_PAYLOAD` contains refund result.
 
-The payment result is an instance of one of the following classes:
+The payment result is an instance of one of the classes listed in the following.
 
 #### RefundResult.Canceled
 
@@ -357,29 +355,29 @@ Refund was canceled by merchant. Doesn't contain any additional data.
 
 Refund failed. The failure reason is defined by reason field and be one of the following:
 
-1. `RefundFailureReason.Failed` - Failure due to unknown reasons
-2. `RefundFailureReason.NotAuthorized` - There is no authorized user to process payment request
-3. `RefundFailureReason.NotFound` - Payment with given reference id was not found
-4. `RefundFailureReason.NotRefundable` - Payment is not refundable
-5. `RefundFailureReason.NetworkError` - Communication with Zettle servers failed
-6. `RefundFailureReason.TechnicalError` - Payment failed because of technical issues
-7. `RefundFailureReason.AlreadyRefunded` - Payment was already refunded
-8. `RefundFailureReason.AmountTooHigh` - Trying to perform refund with amount higher than original payment
-9. `RefundFailureReason.RefundExpired` - Payment refund is too old to be refunded
-10. `RefundFailureReason.InsufficientFunds` - Account does not have sufficient funds to perform refund
-11. `RefundFailureReason.PartialRefundNotSupported` - Partial refund is not allowed for this payment
+1. `RefundFailureReason.Failed`. Failure due to unknown reasons.
+2. `RefundFailureReason.NotAuthorized`. There is no authorized user to process payment request.
+3. `RefundFailureReason.NotFound`. Payment with given reference ID was not found.
+4. `RefundFailureReason.NotRefundable`. Payment is not refundable.
+5. `RefundFailureReason.NetworkError`. Communication with Zettle servers failed.
+6. `RefundFailureReason.TechnicalError`. Payment failed because of technical issues.
+7. `RefundFailureReason.AlreadyRefunded`. Payment was already refunded.
+8. `RefundFailureReason.AmountTooHigh`. Trying to perform refund with amount higher than original payment.
+9. `RefundFailureReason.RefundExpired`. Payment refund is too old to be refunded.
+10. `RefundFailureReason.InsufficientFunds`. Account does not have sufficient funds to perform refund.
+11. `RefundFailureReason.PartialRefundNotSupported`. Partial refund is not allowed for this payment.
 
 #### RefundResult.Completed
 
 Card payment was successfully completed. Contains transaction info in `payload` field.
 
-* `originalAmount` - Total original card payment amount (also includes tip amount if applicable)
-* `cardType` - card brand: VISA, MASTERCARD and so on
-* `cardIssuingBank` - card issuing bank if provided
-* `maskedPan` - e.g. "**** **** **** 1111"
-* `reference` - your reference object
+* `originalAmount`. Total original card payment amount (also includes tip amount if applicable).
+* `cardType`. Card brand: VISA, MASTERCARD and so on.
+* `cardIssuingBank`. Card issuing bank if provided.
+* `maskedPan`. For example "**** **** **** 1111".
+* `reference`. Your reference object.
 
-### Open card reader settings
+## Open card reader settings
 
 If you would like to provide a way to access a card reader settings from outside the payment flow you can use the following static method to get the intent.
 
