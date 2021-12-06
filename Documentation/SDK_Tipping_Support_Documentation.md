@@ -34,8 +34,8 @@ Tipping will be made available on a market by market basis. The following market
 ### Additional material
 
 - [Zettle SDK tipping FAQ](#zettle-sdk-tipping-faq)
-- [Extra Amount Tipping Flow](/Documentation/Tipping_flow_on_the_Zettle_card_reader/Extra%20Amount%20Tipping%20Flow.md) 
-- [Total Amount Tipping Flow](/Documentation/Tipping_flow_on_the_Zettle_card_reader/Total%20Amount%20Tipping%20Flow.md)
+- [Extra Amount Tipping Flow](Tipping_flow_on_the_Zettle_card_reader/Extra%20Amount%20Tipping%20Flow.md) 
+- [Total Amount Tipping Flow](Tipping_flow_on_the_Zettle_card_reader/Total%20Amount%20Tipping%20Flow.md)
 
 ## Zettle SDK tipping FAQ
 
@@ -44,7 +44,7 @@ Tipping will be made available on a market by market basis. The following market
 Zettle's tipping function allows customers to add an extra amount to the total sum of their bill (market specific versions: entering total sum or adding an extra amount), and they can do so straight into your card reader. This function only works with a Zettle Reader.
 
 ### How do I activate the tipping function within the SDK?
-Tipping is optional and is enabled by setting `enableTipping` to `true`. For more information on activating the tipping function, see [Step 5: Starting payment](../../README.md#step-5-starting-payment).
+Tipping is optional and is enabled by setting `enableTipping` to `true`. For more information on activating the tipping function, see [Starting Card payments](../README.md#starting-card-payments).
 
 Setting `enableTipping` to `true` does not guarantee that tipping flow will be displayed. This is because tipping is not supported by all accounts and all card readers.
 
