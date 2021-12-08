@@ -218,8 +218,7 @@ private fun doTokenLogin() {
 }
 ```
 
-> **Note:** If you don't declare the activity in your manifest, you can never let the SDK log the user in.  
-It will always give an error for you to handle if not authorized. If building refunds-support you must keep declare it since refunds don't allow headless authentication. 
+> **Note:** If you don't declare `OAuthActivity` in your manifest, the SDK will never let the user log in. If the user is not authorized, you will always get an error to handle. When building refund support, you must keep declaring `OAuthActivity`. This is because refunds don't allow headless authentication.
 
 
 
@@ -237,7 +236,7 @@ val reference = TransactionReference.Builder(internalTraceId)
     .put("PAYMENT_EXTRA_INFO", "Started from home screen")
     .build()
 ```
-In the constructor of the builder you can provide your own ID with a maximum of 128 characters to identify the payment. This ID can be used to perform payment refunds.
+In the constructor of the builder, provide your own ID with a maximum of 128 characters to identify the payment. This ID can be used to perform payment refunds.
 
 Using the `put` method you can add any value you want to this object. However, keep in mind that the total data size (including key names) in this object can't be bigger than 4 kilobytes.
 
@@ -248,7 +247,7 @@ val intent = CardPaymentActivity.IntentBuilder(this)
     .amount(20000L)
     // MANDATORY, Reference object created in previous step
     .reference(reference)
-    // MANDATORY, enable login prompt in the payment flow if user is not yet logged-in
+    // MANDATORY, enable login prompt in the payment flow if the user is not yet logged in
     .enableLogin(enableLogin)
     // OPTIONAL, you can enable tipping (disabled by default)
     // This option will only work for markets with tipping support
@@ -261,7 +260,7 @@ val intent = CardPaymentActivity.IntentBuilder(this)
 // Start activity with the intent
 startActivityForResult(intent, 0)
 ```
-> **Note:** if setting `enableLogin` to `true` you need to setup auth for provided UI. Otherwise the user will be asked to login, but the app will never receive the result of the authentication.
+> **Note:** if setting `enableLogin` to `true` you need to set up authentication for the provided UI. Otherwise the user will be asked to log in, but the app will never receive the result of the authentication.
 
 #### Note on tipping
 
@@ -375,7 +374,7 @@ To read the full details and information available from the card refund result o
 
 ### Card reader settings
 
-If you would like to provide a way to access card reader settings from outside the payment flow, you can use the following static method to get the intent.
+To access card reader settings from outside the payment flow, use the following static method to get the intent.
 
 ```kotlin
 val intent = CardReadersActivity.newIntent(context)
