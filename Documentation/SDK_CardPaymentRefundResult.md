@@ -10,13 +10,13 @@ The `RefundResult` is a Kotlin sealed class, meaning it's always one of the foll
 The failed and successful results contain more detailed information regarding failure reason, and the payload of a successful refund.
 
 ## Extracting the failure reason
-The `RefundResult.Failed` contains an instance of `RefundFailureReason` that describes the failure and can contain any of the following reasons.
+The `RefundResult.Failed` contains an instance of `RefundFailureReason`. This describes the failure and can contain any of the following reasons.
 
 | Name | Description |
 |:---|:---|
 | `RefundFailureReason.Failed` | Failure due to unknown reasons |
 | `RefundFailureReason.NotAuthorized` | There is no authorized user to process payment request |
-| `RefundFailureReason.NotFound` | Payment with given reference id was not found |
+| `RefundFailureReason.NotFound` | Payment with given reference ID was not found |
 | `RefundFailureReason.NotRefundable` | Payment is not refundable |
 | `RefundFailureReason.NetworkError` | Communication with Zettle servers failed |
 | `RefundFailureReason.TechnicalError` | Payment failed because of technical issues |
@@ -29,7 +29,7 @@ The `RefundResult.Failed` contains an instance of `RefundFailureReason` that des
 
 
 ## Extracting the success payload
-A successfull refund contains a payload of type `RefundPayload` which has fields describing the refund. They are listed in the table below.
+A successfull refund contains a payload of type `RefundPayload`. This has fields describing the refund as listed in the following.
 
 | Name | Type | Description |
 |:---|:---|:---|
