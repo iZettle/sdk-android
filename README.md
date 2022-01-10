@@ -87,6 +87,22 @@ android {
 
 We are using AndroidX in some libraries so you will get them as dependencies as well.
 
+### Targeting Android 12
+
+A change in Android 12 requires an app to explicitly declare `exported` in the manifest. Therefore you need to add the following to your `AndroidManifest.xml` when targeting Android 12 (API 31).
+
+```xml
+<service
+    android:name="com.izettle.android.auth.sync.ZettleSyncService"
+    android:exported="false"/>
+<service
+    android:name="com.izettle.android.auth.ZettleAuthService"
+    android:exported="false"/>
+<receiver
+    android:name="com.izettle.android.auth.sync.ZettleSyncAlarmReceiver"
+    android:exported="false"/>
+```
+
 
 
 ### Configure authentication
