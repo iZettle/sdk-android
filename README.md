@@ -125,7 +125,7 @@ To be able to log in a user through the Zettle SDK user interface, you must add 
 </activity>
 ```
 
-This setup procedure is not mandatory, you can handle the authentication flow yourself and provide the token to the SDK. See [Initiate authorization with token](#initiate-authorization-with-token-since-1240) for more information about this option.
+> **Note:** This setup is also mandatory when authorizing with token, since it is used when authorizing refunds. For more information about this login option, see [Initiate authorization with token](https://github.com/iZettle/payments-sdk-android/pull/1345#initiate-authorization-with-token).
 
 ### Initialize and start the SDK
 
@@ -219,22 +219,23 @@ private fun doProvidedUILogin() {
     IZettleSDK.user.login(this, ResourcesCompat.getColor(resources, R.color.colorAccent, null))
 }
 ```
-This action requires the setup of `OAuthActivity` in your manifest to work.
+
 
 
 #### Initiate authorization with token (since 1.24.0)
 
 > **Note:** This is only available from SDK version 1.24.0
 
-If you already posess a valid Zettle refresh-token for the user to authorize, then you can call the `login` method taking a token as parameter instead. Utilizing this feature does not require the `OAuthActivity` to be declared in your Manifest unless you want to allow refunds. Refunds will always require the UI flow. 
+The SDK requires a proof key for code exchange (PKCE) flow for the user to authorize.
+If you have a PKCE flow setup to get access and refresh tokens, you can call the `login` method with the refresh token as parameter. For information about setting up a PKCE flow, see [OAuth PKCE method](https://oauth.net/2/pkce/). 
 
 ```kotlin
 private fun doTokenLogin() {
-    IZettleSDK.user.login("pre-authorized-token")
+    IZettleSDK.user.login("pre-authorized-refresh-token")
 }
 ```
 
-> **Note:** If you don't declare `OAuthActivity` in your manifest, the SDK will never let the user log in. If the user is not authorized, you will always get an error to handle. When building refund support, you must keep declaring `OAuthActivity`. This is because refunds don't allow headless authentication.
+> **Note:** You still need to declare the `OAuthActivity` in your manifest since it's used when performing refunds.
 
 
 
