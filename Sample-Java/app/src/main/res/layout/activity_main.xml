@@ -72,81 +72,13 @@
 
         </LinearLayout>
 
-        <!-- Payment -->
+        <!-- Payment types -->
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Payment"
-            android:textColor="@color/divider_text"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="16dp"
-            android:background="@color/divider" />
-
-        <EditText
-            android:id="@+id/amount_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:autofillHints="Amount"
-            android:hint="Amount"
-            android:inputType="number"
-            android:text="1000" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/tipping_check_box"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:enabled="true"
-                android:text="Enable\nTipping" />
-
-            <CheckBox
-                android:id="@+id/installments_check_box"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:checked="true"
-                android:text="Enable\nInstallments" />
-
-            <CheckBox
-                android:id="@+id/login_check_box"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:checked="false"
-                android:text="Enable\nLogin" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/charge_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Charge" />
-
-        <!-- Refund -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Refund"
+            android:text="Payment Types"
             android:textColor="@color/divider_text"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -158,33 +90,18 @@
             android:background="@color/divider" />
 
         <Button
-            android:id="@+id/refund_btn"
+            android:id="@+id/open_card_reader_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Refund last payment" />
-
-        <!-- Settings -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Card reader settings"
-            android:textColor="@color/divider_text"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="16dp"
-            android:background="@color/divider" />
+            android:layout_marginTop="8dp"
+            android:text="Open Card Reader" />
 
         <Button
-            android:id="@+id/settings_btn"
+            android:id="@+id/open_paypal_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Open settings" />
+            android:layout_marginTop="8dp"
+            android:text="Open PayPal QRC" />
 
     </LinearLayout>
 </ScrollView>
