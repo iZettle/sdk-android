@@ -125,7 +125,7 @@ To be able to log in a user through the Zettle SDK user interface, you must add 
 </activity>
 ```
 
-> **Note:** This setup is also mandatory when authorizing with token, since it is used when authorizing refunds. For more information about this login option, see [Initiate authorization with token](#initiate-authorization-with-token-since-1.24.0).
+> **Note:** This setup is also mandatory when authorizing with token, since it is used when authorizing refunds. For more information about this login option, see [Initiate authorization with token](#initiate-authorization-with-token-since-1240).
 
 ### Initialize and start the SDK
 
