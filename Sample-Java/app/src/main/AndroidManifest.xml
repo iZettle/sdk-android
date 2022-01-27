@@ -12,9 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:fullBackupContent">
+        tools:replace="android:fullBackupContent,android:supportsRtl">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -22,9 +23,18 @@
         </activity>
 
         <activity
+            android:name=".CardReaderActivity"
+            android:label="Card Reader" />
+
+        <activity
+            android:name=".PayPalQrcActivity"
+            android:label="PayPal Qrc" />
+
+        <activity
             android:name="com.izettle.android.auth.OAuthActivity"
             android:launchMode="singleTask"
-            android:taskAffinity="@string/oauth_activity_task_affinity">
+            android:taskAffinity="@string/oauth_activity_task_affinity"
+            android:exported="true">
             <intent-filter>
                 <data
                     android:host="@string/redirect_url_host"
