@@ -7,10 +7,10 @@ The `CardPaymentResult` is a Kotlin sealed class, meaning it's always one of the
 | `CardPaymentResult.Failed`  | Payment failed |
 | `CardPaymentResult.Completed` | Payment was successfully completed |
 
-The payment-failed result contains more details about failure reason. The payment-completed result contains more details about the successfully completed payment.
+The failed and completed results contain more detailed information regarding failure reason, or the payload of a successfully completed payment.
 
 ## Extracting the failure reason
-The `CardPaymentResult.Failed` contains an instance of `FailureReason`. This describes the failure, which can be caused by any of the following reasons.
+The `CardPaymentResult.Failed` contains an instance of `FailureReason` describing the failure, and can contain any of the following reasons.
 
 | Name | Description |
 |:---|:---|
