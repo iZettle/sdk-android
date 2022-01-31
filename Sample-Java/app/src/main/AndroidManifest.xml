@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.izettle.payments.android.java_sample">
+    package="com.izettle.payments.android.java_example">
 
     <application
         android:name=".MainApplication"
@@ -27,7 +27,7 @@
             android:label="Card Reader" />
 
         <activity
-            android:name=".PayPalQrcActivity"
+            android:name="com.izettle.payments.android.java_example.PayPalQrcActivity"
             android:label="PayPal Qrc" />
 
         <activity
