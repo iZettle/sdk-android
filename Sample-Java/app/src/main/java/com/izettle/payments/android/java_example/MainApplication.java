@@ -1,4 +1,4 @@
-package com.izettle.payments.android.java_sample;
+package com.izettle.payments.android.java_example;
 
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;

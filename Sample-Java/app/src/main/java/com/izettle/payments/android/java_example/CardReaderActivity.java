@@ -1,6 +1,6 @@
-package com.izettle.payments.android.java_sample;
+package com.izettle.payments.android.java_example;
 
-import static com.izettle.payments.android.java_sample.Utils.parseLong;
+import static com.izettle.payments.android.java_example.Utils.parseLong;
 
 import android.app.Activity;
 import android.content.Intent;
