@@ -105,7 +105,6 @@ public class PayPalQrcActivity extends AppCompatActivity {
 
         UUID uuid = UUID.randomUUID();
         Intent intent = new PayPalQrcPaymentActivity.IntentBuilder(this)
-            .reference(UUID.randomUUID().toString())
             .appearance(appearance)
             .amount(amount)
             .reference(uuid.toString())
