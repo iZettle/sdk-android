@@ -1,4 +1,4 @@
-package com.izettle.payments.android.kotlin_sample
+package com.izettle.payments.android.kotlin_example
 
 import android.annotation.SuppressLint
 import android.content.Intent

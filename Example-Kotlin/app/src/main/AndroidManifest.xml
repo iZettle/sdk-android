@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.izettle.payments.android.kotlin_sample">
+    package="com.izettle.payments.android.kotlin_example">
 
     <application
-        android:name=".MainApplication"
+        android:name="com.izettle.payments.android.kotlin_example.MainApplication"
         android:allowBackup="true"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:fullBackupContent,android:supportsRtl">
 
-        <activity android:name=".MainActivity"
+        <activity android:name="com.izettle.payments.android.kotlin_example.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,11 +23,11 @@
         </activity>
 
         <activity
-            android:name=".CardReaderActivity"
+            android:name="com.izettle.payments.android.kotlin_example.CardReaderActivity"
             android:label="Card Reader" />
 
         <activity
-            android:name=".PayPalQrcActivity"
+            android:name="com.izettle.payments.android.kotlin_example.PayPalQrcActivity"
             android:label="PayPal Qrc" />
 
         <activity
