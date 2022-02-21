@@ -6,24 +6,24 @@ The SDK is compatible with apps supporting Android API level 21 and above. The S
 
 The SDK requires location permission to function properly. During the integration process, you will be required to present your GitHub access token and your OAuth credentials. Ensure you have these at hand in advance, see Prerequisites.
 
-Currently there are two ways of handling payments with the SDK: Card payments and PayPal QRC.
+Currently there are these ways of handling payments with the SDK: Card payments, and QRC using PayPal or Venmo.
 The following table describes the availability in different markets.
 
-| Market         | Card Payments | PayPal QRC |
-| :------------- | :------------ | :--------- |
-| United States  | ✅             | ✅          |
-| United Kingdom | ✅             | ✅          |
-| Sweden         | ✅             | -          |
-| Brazil         | ✅             | -          |
-| Norway         | ✅             | -          |
-| Denmark        | ✅             | -          |
-| Finland        | ✅             | -          |
-| Germany        | ✅             | ✅          |
-| Mexico         | ✅             | -          |
-| Netherlands    | ✅             | -          |
-| France         | ✅             | -          |
-| Spain          | ✅             | -          |
-| Italy          | ✅             | -          |
+| Market         | Card Payments | PayPal QRC | Venmo QRC
+| :------------- | :------------ | :--------- | :--------- 
+| United States  | ✅             | ✅          | ✅          |
+| United Kingdom | ✅             | ✅          | -          |
+| Sweden         | ✅             | -          | -          |
+| Brazil         | ✅             | -          | -          |
+| Norway         | ✅             | -          | -          |
+| Denmark        | ✅             | -          | -          |
+| Finland        | ✅             | -          | -          |
+| Germany        | ✅             | ✅          | -          |
+| Mexico         | ✅             | -          | -          |
+| Netherlands    | ✅             | -          | -          |
+| France         | ✅             | -          | -          |
+| Spain          | ✅             | -          | -          |
+| Italy          | ✅             | -          | -          |
 
 Regardless of where you are located, you can only integrate your point of sales (POS) with the Zettle SDK in supported markets.
 
