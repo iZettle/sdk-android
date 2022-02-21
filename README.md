@@ -6,7 +6,7 @@ The SDK is compatible with apps supporting Android API level 21 and above. The S
 
 The SDK requires location permission to function properly. During the integration process, you will be required to present your GitHub access token and your OAuth credentials. Ensure you have these at hand in advance, see Prerequisites.
 
-Currently there are these ways of handling payments with the SDK: Card payments, and QRC using PayPal or Venmo.
+Currently there are these ways to handle payments with the SDK: Card payments, and QRC using PayPal or Venmo.
 The following table describes the availability in different markets.
 
 | Market         | Card Payments | PayPal QRC | Venmo QRC
