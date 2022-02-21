@@ -29,6 +29,7 @@ Tipping will be made available on a market by market basis. The following market
 - Finland
 - United Kingdom
 - The Netherlands
+- France (from SDK version `1.23.1`)
 - Germany
 
 ### Additional material
@@ -68,6 +69,7 @@ The tipping style is pre-defined per market and is not configurable.
 | Norway | Total Amount |
 | Denmark | Extra Amount |
 | Finland | Total Amount |
+| France | Extra Amount |
 | United Kingdom | Extra Amount |
 | The Netherlands | Total Amount |
 | Germany | Total Amount |

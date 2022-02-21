@@ -252,6 +252,7 @@ private fun doTokenLogin() {
 
 First you need to create a `TransactionReference` object using the builder provided.
 
+
 > **Important**: The ID of the transaction reference object must be unique.
 
 ```kotlin
@@ -260,7 +261,6 @@ val reference = TransactionReference.Builder(internalUniqueTraceId)
     .put("PAYMENT_EXTRA_INFO", "Started from home screen")
     .build()
 ```
-
 In the constructor of the builder, you must provide your own unique ID with a maximum of 128 characters to identify the payment. This ID can be used to perform payment refunds.
 
 Using the `put` method you can add any value you want to this object. However, the total data size (including key names) in this object can't be bigger than 4 kilobytes.
