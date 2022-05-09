@@ -1,5 +1,11 @@
 ![andriod:5.0+](https://img.shields.io/badge/android-5.0%2B-green?style=flat)
 
+:warning: **Starting May 9, 2022, all the documentation for Android SDK is available on [Zettle Developer Portal](https://developer.zettle.com).** 
+
+ **The documentation in this repository is no longer maintained.** 
+
+---
+
 # Getting started with Zettle Payments SDK for Android
 
 The SDK is compatible with apps supporting Android API level 21 and above. The SDK itself is written in Kotlin which is the preferred language, however, we provide examples both in Kotlin and in Java.
