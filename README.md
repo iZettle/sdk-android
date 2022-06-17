@@ -531,4 +531,4 @@ startActivity(intent)
 
 ## Get help
 
-Contact our [Integrations team](mailto:sdk@zettle.com) for more information.
+Contact our developer support at [Zettle Developer Portal](https://developer.zettle.com).
