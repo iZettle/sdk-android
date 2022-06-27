@@ -6,7 +6,6 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.izettle.payments.android.payment.TransactionReference
 import com.izettle.payments.android.payment.refunds.CardPaymentPayload
 import com.izettle.payments.android.payment.refunds.RefundsManager
@@ -42,9 +41,9 @@ class CardReaderActivity : AppCompatActivity() {
         installmentsCheckBox = findViewById(R.id.installments_check_box)
         lastPaymentTraceId = MutableLiveData()
 
-        lastPaymentTraceId.observe(this, Observer { value: String? ->
+        lastPaymentTraceId.observe(this) { value: String? ->
             refundButton.isEnabled = value != null
-        })
+        }
 
         chargeButton.setOnClickListener { onChargeClicked() }
         refundButton.setOnClickListener { onRefundClicked() }

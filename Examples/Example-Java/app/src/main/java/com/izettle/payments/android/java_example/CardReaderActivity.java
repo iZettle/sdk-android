@@ -26,6 +26,7 @@ import com.izettle.payments.android.ui.readers.CardReadersActivity;
 import com.izettle.payments.android.ui.refunds.RefundResult;
 import com.izettle.payments.android.ui.refunds.RefundsActivity;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class CardReaderActivity extends AppCompatActivity {
@@ -52,13 +53,11 @@ public class CardReaderActivity extends AppCompatActivity {
         installmentsCheckBox = findViewById(R.id.installments_check_box);
         lastPaymentTraceId = new MutableLiveData<>();
 
-        lastPaymentTraceId.observe(this, value -> {
-            refundButton.setEnabled(value != null);
-        });
+        lastPaymentTraceId.observe(this, value -> refundButton.setEnabled(value != null));
 
-        chargeButton.setOnClickListener( v -> { onChargeClicked(); });
-        refundButton.setOnClickListener( v -> { onRefundClicked(); });
-        settingsButton.setOnClickListener( v -> { onSettingsClicked(); });
+        chargeButton.setOnClickListener( v -> onChargeClicked());
+        refundButton.setOnClickListener( v -> onRefundClicked());
+        settingsButton.setOnClickListener( v -> onSettingsClicked());
     }
 
     private final ActivityResultLauncher<Intent> paymentLauncher = registerForActivityResult(new StartActivityForResult(), result -> {
@@ -67,10 +66,10 @@ public class CardReaderActivity extends AppCompatActivity {
             if(parsed instanceof CardPaymentResult.Completed) {
                 showToast("Payment completed");
                 CardPaymentResult.Completed casted = (CardPaymentResult.Completed) parsed;
-                lastPaymentTraceId.setValue(casted.getPayload().getReference().getId());
+                lastPaymentTraceId.setValue(Objects.requireNonNull(casted.getPayload().getReference()).getId());
             }
             else if(parsed instanceof CardPaymentResult.Failed) {
-                showToast("Payment failed "+ ((CardPaymentResult.Failed) parsed).getReason().toString());
+                showToast("Payment failed "+ ((CardPaymentResult.Failed) parsed).getReason());
             }
             else if(parsed instanceof CardPaymentResult.Canceled) {
                 showToast("Payment canceled");
@@ -85,7 +84,7 @@ public class CardReaderActivity extends AppCompatActivity {
                 showToast("Refund completed");
             }
             else if(parsed instanceof RefundResult.Failed) {
-                showToast("Refund failed "+ ((RefundResult.Failed) parsed).getReason().toString());
+                showToast("Refund failed "+ ((RefundResult.Failed) parsed).getReason());
             }
             else if(parsed instanceof RefundResult.Canceled) {
                 showToast("Refund canceled");

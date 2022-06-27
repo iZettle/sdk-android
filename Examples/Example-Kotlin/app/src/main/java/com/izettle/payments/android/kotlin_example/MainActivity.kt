@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.izettle.android.commons.ext.state.toLiveData
 import com.izettle.payments.android.sdk.IZettleSDK
 import com.izettle.payments.android.sdk.User.AuthState.LoggedIn
@@ -30,9 +29,9 @@ class MainActivity : AppCompatActivity() {
         openCardReaderButton = findViewById(R.id.open_card_reader_btn)
         openPayPalQrcButton = findViewById(R.id.open_paypal_btn)
 
-        IZettleSDK.user.state.toLiveData().observe(this, Observer { state ->
+        IZettleSDK.user.state.toLiveData().observe(this) { state ->
             onAuthStateChanged(state is LoggedIn)
-        })
+        }
 
         loginButton.setOnClickListener {
             IZettleSDK.user.login(this, Color.WHITE)

@@ -33,17 +33,13 @@ public class MainActivity extends AppCompatActivity {
         openCardReaderButton = findViewById(R.id.open_card_reader_btn);
         openPayPalQrcButton = findViewById(R.id.open_paypal_btn);
 
-        toLiveData(IZettleSDK.Instance.getUser().getState()).observe(this, state -> {
-            onAuthStateChanged(state instanceof User.AuthState.LoggedIn);
-        });
+        toLiveData(IZettleSDK.Instance.getUser().getState()).observe(this, state ->
+                onAuthStateChanged(state instanceof User.AuthState.LoggedIn));
 
-        loginButton.setOnClickListener( v -> {
-            IZettleSDK.Instance.getUser().login(this, Color.WHITE);
-        });
+        loginButton.setOnClickListener( v ->
+                IZettleSDK.Instance.getUser().login(this, Color.WHITE));
 
-        logoutButton.setOnClickListener( v -> {
-            IZettleSDK.Instance.getUser().logout();
-        });
+        logoutButton.setOnClickListener( v -> IZettleSDK.Instance.getUser().logout());
 
         openCardReaderButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, CardReaderActivity.class);

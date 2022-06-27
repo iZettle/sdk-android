@@ -47,9 +47,9 @@ public class PayPalQrcActivity extends AppCompatActivity {
         refundAmountEditText = findViewById(R.id.refund_amount_input);
         lastPaymentTraceId = new MutableLiveData<>();
 
-        chargeButton.setOnClickListener( v -> { onChargeClicked(); } );
-        settingsButton.setOnClickListener( v -> { onSettingsClicked(); } );
-        refundButton.setOnClickListener( v -> { onRefundLastPayment(); } );
+        chargeButton.setOnClickListener( v -> onChargeClicked());
+        settingsButton.setOnClickListener( v -> onSettingsClicked());
+        refundButton.setOnClickListener( v -> onRefundLastPayment());
     }
 
     private final ActivityResultLauncher<Intent> paymentLauncher = registerForActivityResult(new StartActivityForResult(), result -> {
@@ -63,7 +63,7 @@ public class PayPalQrcActivity extends AppCompatActivity {
                         .append(String.valueOf(casted.getPayment().getAmount())));
             }
             else if(parsed instanceof PayPalQrcPaymentResult.Failed) {
-                showToast("Payment failed " + ((PayPalQrcPaymentResult.Failed) parsed).getReason().toString());
+                showToast("Payment failed " + ((PayPalQrcPaymentResult.Failed) parsed).getReason());
             }
             else if(parsed instanceof PayPalQrcPaymentResult.Canceled) {
                 showToast("Payment canceled");
@@ -78,7 +78,7 @@ public class PayPalQrcActivity extends AppCompatActivity {
                 showToast("Refund completed");
             }
             else if(parsed instanceof PayPalQrcRefundResult.Failed) {
-                showToast("Refund failed "+ ((PayPalQrcRefundResult.Failed) parsed).getReason().toString());
+                showToast("Refund failed "+ ((PayPalQrcRefundResult.Failed) parsed).getReason());
             }
             else if(parsed instanceof PayPalQrcRefundResult.Canceled) {
                 showToast("Refund canceled");
