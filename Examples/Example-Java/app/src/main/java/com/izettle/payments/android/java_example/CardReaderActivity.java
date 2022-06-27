@@ -142,7 +142,7 @@ public class CardReaderActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(CardPaymentPayload payload) {
-            TransactionReference reference = new TransactionReference.Builder(payload.getReferenceId())
+            TransactionReference reference = new TransactionReference.Builder(UUID.randomUUID().toString())
                 .put("REFUND_EXTRA_INFO", "Started from home screen")
                 .build();
             Intent intent = new RefundsActivity.IntentBuilder(CardReaderActivity.this)

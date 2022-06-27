@@ -128,7 +128,7 @@ class CardReaderActivity : AppCompatActivity() {
         }
 
         override fun onSuccess(payload: CardPaymentPayload) {
-            val reference = TransactionReference.Builder(payload.referenceId)
+            val reference = TransactionReference.Builder(UUID.randomUUID().toString())
                 .put("REFUND_EXTRA_INFO", "Started from home screen")
                 .build()
             val intent = RefundsActivity.IntentBuilder(this@CardReaderActivity)
