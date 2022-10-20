@@ -5,6 +5,7 @@ import static com.izettle.payments.android.java_example.Utils.parseLong;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -35,6 +36,7 @@ public class CardReaderActivity extends AppCompatActivity {
     private Button refundButton;
     private Button settingsButton;
     private EditText amountEditText;
+    private EditText refundAmountEditText;
     private CheckBox tippingCheckBox;
     private CheckBox installmentsCheckBox;
     private CheckBox loginCheckBox;
@@ -48,6 +50,7 @@ public class CardReaderActivity extends AppCompatActivity {
         refundButton = findViewById(R.id.refund_btn);
         settingsButton = findViewById(R.id.settings_btn);
         amountEditText = findViewById(R.id.amount_input);
+        refundAmountEditText = findViewById(R.id.refund_amount_input);
         tippingCheckBox = findViewById(R.id.tipping_check_box);
         loginCheckBox = findViewById(R.id.login_check_box);
         installmentsCheckBox = findViewById(R.id.installments_check_box);
@@ -67,6 +70,8 @@ public class CardReaderActivity extends AppCompatActivity {
                 showToast("Payment completed");
                 CardPaymentResult.Completed casted = (CardPaymentResult.Completed) parsed;
                 lastPaymentTraceId.setValue(Objects.requireNonNull(casted.getPayload().getReference()).getId());
+                refundAmountEditText.setText(new SpannableStringBuilder()
+                        .append(String.valueOf(casted.getPayload().getAmount())));
             }
             else if(parsed instanceof CardPaymentResult.Failed) {
                 showToast("Payment failed "+ ((CardPaymentResult.Failed) parsed).getReason());
@@ -128,11 +133,18 @@ public class CardReaderActivity extends AppCompatActivity {
     private void onRefundClicked() {
         String id = lastPaymentTraceId.getValue();
         if(id != null) {
-            IZettleSDK.Instance.getRefundsManager().retrieveCardPayment(id, new RefundCallback());
+            Long amount = parseLong(refundAmountEditText.getText());
+            IZettleSDK.Instance.getRefundsManager().retrieveCardPayment(id, new RefundCallback(amount));
         }
     }
 
     private class RefundCallback implements RefundsManager.Callback<CardPaymentPayload, RetrieveCardPaymentFailureReason> {
+
+        private final Long amount;
+
+        public RefundCallback(Long amount) {
+            this.amount = amount != null ? amount : 0L;
+        }
 
         @Override
         public void onFailure(RetrieveCardPaymentFailureReason reason) {
@@ -147,7 +159,7 @@ public class CardReaderActivity extends AppCompatActivity {
             Intent intent = new RefundsActivity.IntentBuilder(CardReaderActivity.this)
                 .cardPayment(payload)
                 .receiptNumber("#123456")
-                .taxAmount(payload.getAmount() / 10)
+                .taxAmount(amount)
                 .reference(reference)
                 .build();
 
