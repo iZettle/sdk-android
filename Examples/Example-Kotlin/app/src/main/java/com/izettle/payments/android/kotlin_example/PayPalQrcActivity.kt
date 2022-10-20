@@ -4,7 +4,10 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.CheckBox
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -101,7 +104,6 @@ class PayPalQrcActivity : AppCompatActivity() {
 
         val uuid = UUID.randomUUID()
         val intent = PayPalQrcPaymentActivity.IntentBuilder(this)
-            .reference(UUID.randomUUID().toString())
             .appearance(appearance)
             .amount(amount)
             .reference(uuid.toString())
@@ -122,7 +124,7 @@ class PayPalQrcActivity : AppCompatActivity() {
             .paymentReference(internalTraceId)
             .reference(UUID.randomUUID().toString())
             .apply {
-                if (amount != null) {
+                if (amount != null && amount != 0L) {
                     amount(amount)
                 }
             }
@@ -144,12 +146,5 @@ class PayPalQrcActivity : AppCompatActivity() {
                 .appearance(appearance)
                 .build()
         )
-    }
-
-    private fun Editable.toLong(): Long? = try {
-        val content = this.toString()
-        content.toLong()
-    } catch (e: Exception) {
-        null
     }
 }

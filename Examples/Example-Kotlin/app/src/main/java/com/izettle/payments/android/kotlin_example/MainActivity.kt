@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -58,4 +59,11 @@ class MainActivity : AppCompatActivity() {
         loginButton.isEnabled = !isLoggedIn
         logoutButton.isEnabled = isLoggedIn
     }
+}
+
+internal fun Editable.toLong(): Long? = try {
+    val content = this.toString()
+    content.toLong()
+} catch (e: Exception) {
+    null
 }
