@@ -1,8 +1,13 @@
 package com.izettle.payments.android.kotlin_example
 
+
 import android.app.Activity
 import android.os.Bundle
-import android.widget.*
+import android.text.SpannableStringBuilder
+import android.widget.Button
+import android.widget.EditText
+import android.widget.CheckBox
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -16,12 +21,13 @@ import com.izettle.payments.android.ui.payment.CardPaymentResult
 import com.izettle.payments.android.ui.readers.CardReadersActivity
 import com.izettle.payments.android.ui.refunds.RefundResult
 import com.izettle.payments.android.ui.refunds.RefundsActivity
-import java.util.*
+import java.util.UUID
 
 class CardReaderActivity : AppCompatActivity() {
 
     private lateinit var chargeButton: Button
     private lateinit var refundButton: Button
+    private lateinit var refundAmountEditText: EditText
     private lateinit var settingsButton: Button
     private lateinit var amountEditText: EditText
     private lateinit var tippingCheckBox: CheckBox
@@ -37,6 +43,7 @@ class CardReaderActivity : AppCompatActivity() {
         settingsButton = findViewById(R.id.settings_btn)
         amountEditText = findViewById(R.id.amount_input)
         tippingCheckBox = findViewById(R.id.tipping_check_box)
+        refundAmountEditText = findViewById(R.id.refund_amount_input)
         loginCheckBox = findViewById(R.id.login_check_box)
         installmentsCheckBox = findViewById(R.id.installments_check_box)
         lastPaymentTraceId = MutableLiveData()
@@ -59,6 +66,8 @@ class CardReaderActivity : AppCompatActivity() {
                         is CardPaymentResult.Completed -> {
                             lastPaymentTraceId.value = result.payload.reference?.id
                             showToast("Payment completed")
+                            refundAmountEditText.text = SpannableStringBuilder()
+                                .append(result.payload.amount.toString())
                         }
                         is CardPaymentResult.Canceled -> showToast("Payment canceled")
                         is CardPaymentResult.Failed -> showToast("Payment failed ")
@@ -116,10 +125,11 @@ class CardReaderActivity : AppCompatActivity() {
 
     private fun onRefundClicked() {
         val internalTraceId = lastPaymentTraceId.value ?: return
-        refundsManager.retrieveCardPayment(internalTraceId, RefundCallback())
+        val amount = refundAmountEditText.text.toLong() ?: 0L
+        refundsManager.retrieveCardPayment(internalTraceId, RefundCallback(amount))
     }
 
-    private inner class RefundCallback :
+    private inner class RefundCallback(val amount: Long = 0L) :
         RefundsManager.Callback<CardPaymentPayload, RetrieveCardPaymentFailureReason> {
 
         override fun onFailure(reason: RetrieveCardPaymentFailureReason) {
@@ -133,7 +143,8 @@ class CardReaderActivity : AppCompatActivity() {
             val intent = RefundsActivity.IntentBuilder(this@CardReaderActivity)
                 .cardPayment(payload)
                 .receiptNumber("#123456")
-                .taxAmount(payload.amount / 10)
+                .taxAmount(amount)
+                .refundAmount(amount)
                 .reference(reference)
                 .build()
 
