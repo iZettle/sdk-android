@@ -160,6 +160,7 @@ public class CardReaderActivity extends AppCompatActivity {
                 .cardPayment(payload)
                 .receiptNumber("#123456")
                 .taxAmount(amount)
+                .refundAmount(amount)
                 .reference(reference)
                 .build();
 

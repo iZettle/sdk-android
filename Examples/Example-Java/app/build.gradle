@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.izettle.payments:android-sdk-ui:1.32.0'
+    implementation 'com.izettle.payments:android-sdk-ui:1.34.3'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
