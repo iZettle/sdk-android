@@ -1,16 +1,16 @@
 package com.izettle.payments.android.kotlin_example
 
-
 import android.app.Activity
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.CheckBox
-import android.widget.Toast
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.snackbar.Snackbar
 import com.izettle.payments.android.payment.TransactionReference
 import com.izettle.payments.android.payment.refunds.CardPaymentPayload
 import com.izettle.payments.android.payment.refunds.RefundsManager
@@ -60,17 +60,18 @@ class CardReaderActivity : AppCompatActivity() {
     private val paymentLauncher =
         registerForActivityResult(StartActivityForResult()) { activityResult ->
             if (activityResult.resultCode == Activity.RESULT_OK) {
-                activityResult.data?.let {
-                    when (val result: CardPaymentResult? =
-                        it.getParcelableExtra(CardPaymentActivity.RESULT_EXTRA_PAYLOAD)) {
+                activityResult.data
+                    ?.getParcelableExtra<CardPaymentResult>(CardPaymentActivity.RESULT_EXTRA_PAYLOAD)
+                    ?.let { result ->
+                        when (result) {
                         is CardPaymentResult.Completed -> {
                             lastPaymentTraceId.value = result.payload.reference?.id
-                            showToast("Payment completed")
+                            showSnackBar("Payment completed")
                             refundAmountEditText.text = SpannableStringBuilder()
                                 .append(result.payload.amount.toString())
                         }
-                        is CardPaymentResult.Canceled -> showToast("Payment canceled")
-                        is CardPaymentResult.Failed -> showToast("Payment failed ")
+                            is CardPaymentResult.Canceled -> showSnackBar("Payment canceled")
+                            is CardPaymentResult.Failed -> showSnackBar("Payment failed Reason#${result.reason.javaClass.simpleName}")
                     }
                 }
             }
@@ -79,19 +80,22 @@ class CardReaderActivity : AppCompatActivity() {
     private val refundLauncher =
         registerForActivityResult(StartActivityForResult()) { activityResult ->
             if (activityResult.resultCode == Activity.RESULT_OK) {
-                activityResult.data?.let {
-                    when (val result: RefundResult? =
-                        it.getParcelableExtra(RefundsActivity.RESULT_EXTRA_PAYLOAD)) {
-                        is RefundResult.Completed -> showToast("Refund completed")
-                        is RefundResult.Canceled -> showToast("Refund canceled")
-                        is RefundResult.Failed -> showToast("Refund failed\n(${result.reason})")
+                activityResult.data
+                    ?.getParcelableExtra<RefundResult>(RefundsActivity.RESULT_EXTRA_PAYLOAD)
+                    ?.let { result ->
+                        when (result) {
+                        is RefundResult.Completed -> showSnackBar("Refund completed")
+                        is RefundResult.Canceled -> showSnackBar("Refund canceled")
+                        is RefundResult.Failed -> showSnackBar("Refund failed Reason#${result.reason}")
                     }
                 }
             }
         }
 
-    private fun showToast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    private fun showSnackBar(text: String) {
+        findViewById<ViewGroup>(android.R.id.content).getChildAt(0).run {
+            Snackbar.make(this, text, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun onChargeClicked() {
@@ -119,13 +123,16 @@ class CardReaderActivity : AppCompatActivity() {
         paymentLauncher.launch(intent)
     }
 
-    private fun onSettingsClicked() {
-        startActivity(CardReadersActivity.newIntent(this))
-    }
-
     private fun onRefundClicked() {
-        val internalTraceId = lastPaymentTraceId.value ?: return
         val amount = refundAmountEditText.text.toLong() ?: 0L
+        val isDevMode = (application as MainApplication).isDevMode
+
+        if (lastPaymentTraceId.value == null && !isDevMode) {
+            showSnackBar("No payment taken")
+            return
+        }
+
+        val internalTraceId = lastPaymentTraceId.value ?: ""
         refundsManager.retrieveCardPayment(internalTraceId, RefundCallback(amount))
     }
 
@@ -133,10 +140,15 @@ class CardReaderActivity : AppCompatActivity() {
         RefundsManager.Callback<CardPaymentPayload, RetrieveCardPaymentFailureReason> {
 
         override fun onFailure(reason: RetrieveCardPaymentFailureReason) {
-            Toast.makeText(this@CardReaderActivity, "Refund failed", Toast.LENGTH_SHORT).show()
+            showSnackBar("Refund failed Reason#$reason")
         }
 
         override fun onSuccess(payload: CardPaymentPayload) {
+            refundPayment(amount, payload)
+        }
+    }
+
+    private fun refundPayment(amount: Long = 0L, payload: CardPaymentPayload) {
             val reference = TransactionReference.Builder(UUID.randomUUID().toString())
                 .put("REFUND_EXTRA_INFO", "Started from home screen")
                 .build()
@@ -147,8 +159,11 @@ class CardReaderActivity : AppCompatActivity() {
                 .refundAmount(amount)
                 .reference(reference)
                 .build()
-
             refundLauncher.launch(intent)
-        }
     }
+
+    private fun onSettingsClicked() {
+        startActivity(CardReadersActivity.newIntent(this))
+    }
+
 }

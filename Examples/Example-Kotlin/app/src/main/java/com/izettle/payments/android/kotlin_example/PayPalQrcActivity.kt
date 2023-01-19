@@ -2,22 +2,22 @@ package com.izettle.payments.android.kotlin_example
 
 import android.app.Activity
 import android.os.Bundle
-import android.text.Editable
 import android.text.SpannableStringBuilder
+import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.CheckBox
-import android.widget.Toast
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.snackbar.Snackbar
 import com.izettle.android.qrc.paypal.ui.PayPalQrcType
 import com.izettle.android.qrc.paypal.ui.activation.PayPalQrcActivationActivity
 import com.izettle.android.qrc.paypal.ui.payment.PayPalQrcPaymentActivity
 import com.izettle.android.qrc.paypal.ui.payment.PayPalQrcPaymentResult
 import com.izettle.android.qrc.paypal.ui.refund.PayPalQrcRefundActivity
 import com.izettle.android.qrc.paypal.ui.refund.PayPalQrcRefundResult
-import java.util.UUID
+import java.util.*
 
 class PayPalQrcActivity : AppCompatActivity() {
 
@@ -52,16 +52,16 @@ class PayPalQrcActivity : AppCompatActivity() {
 
         when (val result = PayPalQrcPaymentActivity.fromIntent(r.data!!)) {
             is PayPalQrcPaymentResult.Completed -> {
-                showToast("Payment completed")
+                showSnackBar("Payment completed")
                 lastPaymentTraceId.value = result.payment.reference
                 refundAmountEditText.text = SpannableStringBuilder()
                     .append(result.payment.amount.toString())
             }
             is PayPalQrcPaymentResult.Failed -> {
-                showToast("Payment failed ${result.reason}")
+                showSnackBar("Payment failed ${result.reason}")
             }
             is PayPalQrcPaymentResult.Canceled -> {
-                showToast("Payment canceled")
+                showSnackBar("Payment canceled")
             }
         }
     }
@@ -73,26 +73,28 @@ class PayPalQrcActivity : AppCompatActivity() {
 
         when (val result = PayPalQrcRefundActivity.fromIntent(r.data!!)) {
             is PayPalQrcRefundResult.Completed -> {
-                showToast("Refund completed")
+                showSnackBar("Refund completed")
             }
             is PayPalQrcRefundResult.Failed -> {
-                showToast("Payment failed ${result.reason}")
+                showSnackBar("Payment failed ${result.reason}")
             }
             is PayPalQrcRefundResult.Canceled -> {
-                showToast("Payment canceled")
+                showSnackBar("Payment canceled")
             }
         }
     }
 
 
-    private fun showToast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    private fun showSnackBar(text: String) {
+        findViewById<ViewGroup>(android.R.id.content).getChildAt(0).run {
+            Snackbar.make(this, text, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun onChargeClicked() {
         val amount = amountEditText.text.toLong()
         if (amount == null) {
-            showToast("Invalid amount")
+            showSnackBar("Invalid amount")
             return
         }
 
@@ -115,20 +117,21 @@ class PayPalQrcActivity : AppCompatActivity() {
     private fun onRefundLastPayment() {
         val amount = refundAmountEditText.text.toLong()
         val internalTraceId = lastPaymentTraceId.value
-        if (internalTraceId == null) {
-            showToast("No payment taken")
+        val isDevMode = (application as MainApplication).isDevMode
+
+        if (internalTraceId == null && !isDevMode) {
+            showSnackBar("No payment taken")
             return
         }
 
         val intent = PayPalQrcRefundActivity.IntentBuilder(this)
-            .paymentReference(internalTraceId)
+            .paymentReference(internalTraceId ?: "")
             .reference(UUID.randomUUID().toString())
             .apply {
                 if (amount != null && amount != 0L) {
                     amount(amount)
                 }
             }
-
             .build()
 
         refundLauncher.launch(intent)

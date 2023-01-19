@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -16,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.izettle.android.qrc.paypal.ui.PayPalQrcType;
 import com.izettle.android.qrc.paypal.ui.activation.PayPalQrcActivationActivity;
 import com.izettle.android.qrc.paypal.ui.payment.PayPalQrcPaymentActivity;
@@ -29,7 +31,7 @@ public class PayPalQrcActivity extends AppCompatActivity {
 
     private Button chargeButton;
     private Button settingsButton;
-    private EditText  amountEditText;
+    private EditText amountEditText;
     private CheckBox venmoCheckBox;
     private Button refundButton;
     private EditText refundAmountEditText;
@@ -47,26 +49,24 @@ public class PayPalQrcActivity extends AppCompatActivity {
         refundAmountEditText = findViewById(R.id.refund_amount_input);
         lastPaymentTraceId = new MutableLiveData<>();
 
-        chargeButton.setOnClickListener( v -> onChargeClicked());
-        settingsButton.setOnClickListener( v -> onSettingsClicked());
-        refundButton.setOnClickListener( v -> onRefundLastPayment());
+        chargeButton.setOnClickListener(v -> onChargeClicked());
+        settingsButton.setOnClickListener(v -> onSettingsClicked());
+        refundButton.setOnClickListener(v -> onRefundLastPayment());
     }
 
     private final ActivityResultLauncher<Intent> paymentLauncher = registerForActivityResult(new StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
             PayPalQrcPaymentResult parsed = PayPalQrcPaymentActivity.Companion.fromIntent(result.getData());
-            if(parsed instanceof PayPalQrcPaymentResult.Completed) {
-                showToast("Payment completed");
+            if (parsed instanceof PayPalQrcPaymentResult.Completed) {
+                showSnackBar("Payment completed");
                 PayPalQrcPaymentResult.Completed casted = (PayPalQrcPaymentResult.Completed) parsed;
                 lastPaymentTraceId.setValue(casted.getPayment().getReference());
                 refundAmountEditText.setText(new SpannableStringBuilder()
                         .append(String.valueOf(casted.getPayment().getAmount())));
-            }
-            else if(parsed instanceof PayPalQrcPaymentResult.Failed) {
-                showToast("Payment failed " + ((PayPalQrcPaymentResult.Failed) parsed).getReason());
-            }
-            else if(parsed instanceof PayPalQrcPaymentResult.Canceled) {
-                showToast("Payment canceled");
+            } else if (parsed instanceof PayPalQrcPaymentResult.Failed) {
+                showSnackBar("Payment failed " + ((PayPalQrcPaymentResult.Failed) parsed).getReason());
+            } else if (parsed instanceof PayPalQrcPaymentResult.Canceled) {
+                showSnackBar("Payment canceled");
             }
         }
     });
@@ -74,59 +74,58 @@ public class PayPalQrcActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> refundLauncher = registerForActivityResult(new StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
             PayPalQrcRefundResult parsed = PayPalQrcRefundActivity.fromIntent(result.getData());
-            if(parsed instanceof PayPalQrcRefundResult.Completed) {
-                showToast("Refund completed");
-            }
-            else if(parsed instanceof PayPalQrcRefundResult.Failed) {
-                showToast("Refund failed "+ ((PayPalQrcRefundResult.Failed) parsed).getReason());
-            }
-            else if(parsed instanceof PayPalQrcRefundResult.Canceled) {
-                showToast("Refund canceled");
+            if (parsed instanceof PayPalQrcRefundResult.Completed) {
+                showSnackBar("Refund completed");
+            } else if (parsed instanceof PayPalQrcRefundResult.Failed) {
+                showSnackBar("Refund failed " + ((PayPalQrcRefundResult.Failed) parsed).getReason());
+            } else if (parsed instanceof PayPalQrcRefundResult.Canceled) {
+                showSnackBar("Refund canceled");
             }
         }
     });
 
-    private void showToast(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    private void showSnackBar(String text) {
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        Snackbar.make(viewGroup.getChildAt(0), text, Snackbar.LENGTH_LONG).show();
     }
 
     private void onChargeClicked() {
-
         Long amount = parseLong(amountEditText.getText());
         if (amount == null) {
-            showToast("Invalid amount");
+            showSnackBar("Invalid amount");
             return;
         }
 
         PayPalQrcType appearance = PayPalQrcType.PayPal;
-        if(venmoCheckBox.isChecked()) {
+        if (venmoCheckBox.isChecked()) {
             appearance = PayPalQrcType.Venmo;
         }
 
         UUID uuid = UUID.randomUUID();
         Intent intent = new PayPalQrcPaymentActivity.IntentBuilder(this)
-            .appearance(appearance)
-            .amount(amount)
-            .reference(uuid.toString())
-            .build();
+                .appearance(appearance)
+                .amount(amount)
+                .reference(uuid.toString())
+                .build();
 
         paymentLauncher.launch(intent);
     }
 
     private void onRefundLastPayment() {
-
         Long amount = parseLong(refundAmountEditText.getText());
         String internalTraceId = lastPaymentTraceId.getValue();
-        if (internalTraceId == null) {
-            showToast("No payment taken");
+        boolean isDevMode = ((MainApplication) getApplication()).isDevMode();
+
+        if (internalTraceId == null && !isDevMode) {
+            showSnackBar("No payment taken");
             return;
         }
 
         PayPalQrcRefundActivity.IntentBuilder builder = new PayPalQrcRefundActivity.IntentBuilder(this)
-            .paymentReference(internalTraceId)
-            .reference(UUID.randomUUID().toString());
+                .paymentReference(internalTraceId != null ? internalTraceId : "")
+                .reference(UUID.randomUUID().toString());
 
-        if(amount != null) {
+        if (amount != null) {
             builder = builder.amount(amount);
         }
 
@@ -135,7 +134,7 @@ public class PayPalQrcActivity extends AppCompatActivity {
 
     private void onSettingsClicked() {
         PayPalQrcType appearance = PayPalQrcType.PayPal;
-        if(venmoCheckBox.isChecked()) {
+        if (venmoCheckBox.isChecked()) {
             appearance = PayPalQrcType.Venmo;
         }
 
