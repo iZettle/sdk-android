@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.izettle.payments.android.payment.TippingStyle;
 import com.izettle.payments.android.payment.TransactionReference;
 import com.izettle.payments.android.payment.refunds.CardPaymentPayload;
 import com.izettle.payments.android.payment.refunds.RefundsManager;
@@ -39,10 +40,11 @@ public class CardReaderActivity extends AppCompatActivity {
     private EditText refundAmountEditText;
     private Button settingsButton;
     private EditText amountEditText;
-    private CheckBox tippingCheckBox;
+    private Button tippingStyleButton;
     private CheckBox installmentsCheckBox;
     private CheckBox loginCheckBox;
     private MutableLiveData<String> lastPaymentTraceId;
+    private TippingStyle tippingStyle = TippingStyle.None;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class CardReaderActivity extends AppCompatActivity {
         settingsButton = findViewById(R.id.settings_btn);
         amountEditText = findViewById(R.id.amount_input);
         refundAmountEditText = findViewById(R.id.refund_amount_input);
-        tippingCheckBox = findViewById(R.id.tipping_check_box);
+        tippingStyleButton = findViewById(R.id.tipping_style_btn);
         loginCheckBox = findViewById(R.id.login_check_box);
         installmentsCheckBox = findViewById(R.id.installments_check_box);
         lastPaymentTraceId = new MutableLiveData<>();
@@ -63,6 +65,15 @@ public class CardReaderActivity extends AppCompatActivity {
         chargeButton.setOnClickListener(v -> onChargeClicked());
         refundButton.setOnClickListener(v -> onRefundClicked());
         settingsButton.setOnClickListener(v -> onSettingsClicked());
+        tippingStyleButton.setOnClickListener(v -> onTippingStyleClicked());
+
+        setTippingStyleTitle();
+
+        getSupportFragmentManager().setFragmentResultListener(TippingStyleBottomSheet.REQUEST_KEY, this, (requestKey, result) -> {
+            TippingStyle newTippingStyle = (TippingStyle) result.getSerializable(TippingStyleBottomSheet.TIPPING_STYLE_KEY);
+            tippingStyle = newTippingStyle != null ? newTippingStyle : TippingStyle.None;
+            setTippingStyleTitle();
+        });
     }
 
     private final ActivityResultLauncher<Intent> paymentLauncher = registerForActivityResult(new StartActivityForResult(), result -> {
@@ -107,7 +118,7 @@ public class CardReaderActivity extends AppCompatActivity {
         }
         String internalTraceId = UUID.randomUUID().toString();
         long amount = parseLong(amountEditText.getText());
-        boolean enableTipping = tippingCheckBox.isChecked();
+        TippingStyle tippingStyle = this.tippingStyle;
         boolean enableInstallments = installmentsCheckBox.isChecked();
         boolean enableLogin = loginCheckBox.isChecked();
         TransactionReference reference = new TransactionReference.Builder(internalTraceId)
@@ -118,7 +129,7 @@ public class CardReaderActivity extends AppCompatActivity {
                 .amount(amount)
                 .reference(reference)
                 .enableInstalments(enableInstallments)
-                .enableTipping(enableTipping)
+                .enableTipping(tippingStyle)
                 .enableLogin(enableLogin)
                 .build();
 
@@ -143,6 +154,15 @@ public class CardReaderActivity extends AppCompatActivity {
                 (internalTraceId != null ? internalTraceId : ""),
                 new RefundCallback(amount)
         );
+    }
+
+    private void onTippingStyleClicked() {
+        TippingStyleBottomSheet.newInstance().show(getSupportFragmentManager(), TippingStyleBottomSheet.class.getSimpleName());
+    }
+
+    private void setTippingStyleTitle() {
+        String tippingStyleTitle = "Tipping Style - " + tippingStyle.name();
+        tippingStyleButton.setText(tippingStyleTitle);
     }
 
     private class RefundCallback implements RefundsManager.Callback<CardPaymentPayload, RetrieveCardPaymentFailureReason> {
