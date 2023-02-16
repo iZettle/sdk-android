@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
+import com.izettle.payments.android.payment.TippingStyle
 import com.izettle.payments.android.payment.TransactionReference
 import com.izettle.payments.android.payment.refunds.CardPaymentPayload
 import com.izettle.payments.android.payment.refunds.RefundsManager
@@ -30,10 +31,12 @@ class CardReaderActivity : AppCompatActivity() {
     private lateinit var refundAmountEditText: EditText
     private lateinit var settingsButton: Button
     private lateinit var amountEditText: EditText
-    private lateinit var tippingCheckBox: CheckBox
     private lateinit var installmentsCheckBox: CheckBox
     private lateinit var loginCheckBox: CheckBox
     private lateinit var lastPaymentTraceId: MutableLiveData<String?>
+    private lateinit var tippingStyleButton: Button
+
+    private var tippingStyle: TippingStyle = TippingStyle.None
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +45,11 @@ class CardReaderActivity : AppCompatActivity() {
         refundButton = findViewById(R.id.refund_btn)
         settingsButton = findViewById(R.id.settings_btn)
         amountEditText = findViewById(R.id.amount_input)
-        tippingCheckBox = findViewById(R.id.tipping_check_box)
         refundAmountEditText = findViewById(R.id.refund_amount_input)
         loginCheckBox = findViewById(R.id.login_check_box)
         installmentsCheckBox = findViewById(R.id.installments_check_box)
+        tippingStyleButton = findViewById(R.id.tipping_style_btn)
+
         lastPaymentTraceId = MutableLiveData()
 
         lastPaymentTraceId.observe(this) { value: String? ->
@@ -55,6 +59,15 @@ class CardReaderActivity : AppCompatActivity() {
         chargeButton.setOnClickListener { onChargeClicked() }
         refundButton.setOnClickListener { onRefundClicked() }
         settingsButton.setOnClickListener { onSettingsClicked() }
+
+        tippingStyleButton.setOnClickListener { onTippingStyleClicked() }
+
+        setTippingStyleTitle()
+
+        supportFragmentManager.setFragmentResultListener(TippingStyleBottomSheet.REQUEST_KEY, this) { _, result ->
+            tippingStyle = result.getSerializable(TippingStyleBottomSheet.TIPPING_STYLE_KEY) as? TippingStyle ?: TippingStyle.None
+            setTippingStyleTitle()
+        }
     }
 
     private val paymentLauncher =
@@ -105,7 +118,7 @@ class CardReaderActivity : AppCompatActivity() {
         }
         val internalTraceId = UUID.randomUUID().toString()
         val amount = amountEditTextContent.toLong()
-        val enableTipping = tippingCheckBox.isChecked
+        val tippingStyle = tippingStyle
         val enableInstallments = installmentsCheckBox.isChecked
         val enableLogin = loginCheckBox.isChecked
         val reference = TransactionReference.Builder(internalTraceId)
@@ -116,7 +129,7 @@ class CardReaderActivity : AppCompatActivity() {
             .amount(amount)
             .reference(reference)
             .enableInstalments(enableInstallments)
-            .enableTipping(enableTipping)
+            .enableTipping(tippingStyle)
             .enableLogin(enableLogin)
             .build()
 
@@ -166,4 +179,13 @@ class CardReaderActivity : AppCompatActivity() {
         startActivity(CardReadersActivity.newIntent(this))
     }
 
+    private fun onTippingStyleClicked() {
+        TippingStyleBottomSheet.newInstance()
+            .show(supportFragmentManager, TippingStyleBottomSheet::class.java.simpleName)
+    }
+
+    private fun setTippingStyleTitle() {
+        val tippingStyleTitle = "Tipping Style - ${tippingStyle.name}"
+        tippingStyleButton.text = tippingStyleTitle
+    }
 }
