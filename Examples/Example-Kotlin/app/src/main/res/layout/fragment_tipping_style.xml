@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tipping_style_none"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textStyle="bold"
+        android:text="None"
+        android:background="?selectableItemBackground"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/tipping_style_default"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textStyle="bold"
+        android:text="Market Default"
+        android:background="?selectableItemBackground"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/tipping_style_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textStyle="bold"
+        android:text="Amount"
+        android:background="?selectableItemBackground"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/tipping_style_percent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textStyle="bold"
+        android:text="Percentage"
+        android:background="?selectableItemBackground"
+        tools:ignore="HardcodedText" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
