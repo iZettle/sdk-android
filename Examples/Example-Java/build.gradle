@@ -2,12 +2,15 @@
 
 buildscript {
 
-    apply from: 'iZettleSDK.gradle'
+    ext.zettle_version = '2.1.1'
+
+    apply from: 'zettleSDK.gradle'
 
     repositories {
         google()
         mavenCentral()
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.2'
 
@@ -23,7 +26,7 @@ allprojects {
             url = uri("https://maven.pkg.github.com/iZettle/sdk-android")
             credentials(HttpHeaderCredentials) {
                 name "Authorization"
-                value "Bearer ${iZettleSDK.githubAccessToken}"
+                value "Bearer ${zettleSDK.githubAccessToken}"
             }
             authentication {
                 header(HttpHeaderAuthentication)

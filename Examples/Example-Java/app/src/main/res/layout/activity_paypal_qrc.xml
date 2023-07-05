@@ -128,6 +128,29 @@
             android:layout_height="wrap_content"
             android:text="Refund last payment" />
 
+        <!-- Retrieve -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Retrieve"
+            android:textColor="@color/divider_text"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/divider" />
+
+        <Button
+            android:id="@+id/retrieve_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Retrieve last transaction" />
+
         <!-- Settings -->
 
         <TextView

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 32
 
     defaultConfig {
-        applicationId "com.izettle.payments.android.java_example"
+        applicationId "com.zettle.payments.android.java_example"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
@@ -24,9 +24,9 @@ android {
         }
 
         buildTypes.each {
-            it.resValue 'string', 'client_id', iZettleSDK.clientId
-            it.resValue 'string', 'redirect_url_scheme', iZettleSDK.redirectUrlScheme
-            it.resValue 'string', 'redirect_url_host', iZettleSDK.redirectUrlHost
+            it.resValue 'string', 'client_id', zettleSDK.clientId
+            it.resValue 'string', 'redirect_url_scheme', zettleSDK.redirectUrlScheme
+            it.resValue 'string', 'redirect_url_host', zettleSDK.redirectUrlHost
         }
     }
 
@@ -37,8 +37,12 @@ android {
 }
 
 dependencies {
-    implementation 'com.izettle.payments:android-sdk-ui:1.36.8'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.zettle.sdk:core:$zettle_version"
+    implementation "com.zettle.sdk.feature.cardreader:ui:$zettle_version"
+    implementation "com.zettle.sdk.feature.qrc:core:$zettle_version"
+    implementation "com.zettle.sdk.feature.qrc:paypal-ui:$zettle_version"
+    implementation "com.zettle.sdk.feature.qrc:venmo-ui:$zettle_version"
+
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

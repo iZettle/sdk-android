@@ -1,13 +1,15 @@
-package com.izettle.payments.android.java_example;
+package com.zettle.payments.android.java_example;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.izettle.payments.android.payment.TippingStyle;
+import com.zettle.sdk.feature.cardreader.payment.TippingStyle;
 
 public class TippingStyleBottomSheet extends BottomSheetDialogFragment {
 

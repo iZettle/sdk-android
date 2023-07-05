@@ -1,4 +1,4 @@
-package com.izettle.payments.android.kotlin_example
+package com.zettle.payments.android.kotlin_example
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -26,7 +26,7 @@ class StartActivity : AppCompatActivity() {
         devMode = findViewById(R.id.dev_mode_switch)
 
         startButton.setOnClickListener {
-            (application as MainApplication).initIZettleSDK(devMode = devMode.isChecked)
+            (application as MainApplication).initZettleSDK(devMode = devMode.isChecked)
             progress()
         }
     }
