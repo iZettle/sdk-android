@@ -23,21 +23,21 @@ For information about Zettle Payments SDK for Android, see [Android SDK docs on 
 
 ## Step 1: Configure the example app
 
-Fill in the `iZettleSDK.gradle` file with the data that you have prepared for the prerequisites.
+Fill in the `zettleSDK.gradle` file with the data that you have prepared for the prerequisites.
 
 ```
 
 // Personal access token with read rights to github package registry
-ext.iZettleSDK.githubAccessToken = ""
+ext.zettleSDK.githubAccessToken = ""
 
 // Auto generated client id from developer portal for this application
-ext.iZettleSDK.clientId = ""
+ext.zettleSDK.clientId = ""
 
 // OAuth redirect url scheme set on developer portal for this application
-ext.iZettleSDK.redirectUrlScheme = ""
+ext.zettleSDK.redirectUrlScheme = ""
 
 // OAuth redirect url scheme set on developer portal for this application
-ext.iZettleSDK.redirectUrlHost = ""
+ext.zettleSDK.redirectUrlHost = ""
 
 ```
 
@@ -50,10 +50,10 @@ Regardless of where you are located, developer mode lets you quickly test the SD
 Developer mode is disabled by default. Enable it to test the example app.
 
 ```Kotlin
-IZettleSDK.init(
+config(applicationContext) {
     ...,
     isDevMode = true
-)
+}
 ```
 
 > **Tip:** You can use developer mode in the example app to test payment and refund responses for card and QRC, see [Try taking payments](https://developer.zettle.com/docs/get-started/user-guides/try-taking-payments).

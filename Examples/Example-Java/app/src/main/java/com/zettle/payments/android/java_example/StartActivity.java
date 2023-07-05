@@ -1,4 +1,4 @@
-package com.izettle.payments.android.java_example;
+package com.zettle.payments.android.java_example;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ public class StartActivity extends AppCompatActivity {
         devMode = findViewById(R.id.dev_mode_switch);
 
         startButton.setOnClickListener(v -> {
-            app.initIZettleSDK(devMode.isChecked());
+            app.initZettleSDK(devMode.isChecked());
             progress();
         });
     }

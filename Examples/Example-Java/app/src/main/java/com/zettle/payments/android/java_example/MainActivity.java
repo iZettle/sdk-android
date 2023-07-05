@@ -1,6 +1,4 @@
-package com.izettle.payments.android.java_example;
-
-import static com.izettle.android.commons.ext.state.StateExtKt.toLiveData;
+package com.zettle.payments.android.java_example;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,8 +9,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.izettle.payments.android.sdk.IZettleSDK;
-import com.izettle.payments.android.sdk.User;
+import com.zettle.sdk.ZettleSDK;
+import com.zettle.sdk.core.auth.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,13 +31,16 @@ public class MainActivity extends AppCompatActivity {
         openCardReaderButton = findViewById(R.id.open_card_reader_btn);
         openPayPalQrcButton = findViewById(R.id.open_paypal_btn);
 
-        toLiveData(IZettleSDK.Instance.getUser().getState()).observe(this, state ->
-                onAuthStateChanged(state instanceof User.AuthState.LoggedIn));
+        ZettleSDK zettleSDK = ZettleSDK.Companion.getInstance();
 
-        loginButton.setOnClickListener( v ->
-                IZettleSDK.Instance.getUser().login(this, Color.WHITE));
+        if(zettleSDK!= null) {
+            zettleSDK.getAuthState().observe(this, state ->
+                    onAuthStateChanged(state instanceof User.AuthState.LoggedIn));
+        }
 
-        logoutButton.setOnClickListener( v -> IZettleSDK.Instance.getUser().logout());
+        loginButton.setOnClickListener( v -> zettleSDK.login(this, Color.WHITE));
+
+        logoutButton.setOnClickListener( v -> zettleSDK.logout());
 
         openCardReaderButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, CardReaderActivity.class);

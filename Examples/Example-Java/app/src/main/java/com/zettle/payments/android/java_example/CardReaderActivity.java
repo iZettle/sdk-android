@@ -1,6 +1,4 @@
-package com.izettle.payments.android.java_example;
-
-import static com.izettle.payments.android.java_example.Utils.parseLong;
+package com.zettle.payments.android.java_example;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult;
@@ -18,17 +15,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.izettle.payments.android.payment.TippingStyle;
-import com.izettle.payments.android.payment.TransactionReference;
-import com.izettle.payments.android.payment.refunds.CardPaymentPayload;
-import com.izettle.payments.android.payment.refunds.RefundsManager;
-import com.izettle.payments.android.payment.refunds.RetrieveCardPaymentFailureReason;
-import com.izettle.payments.android.sdk.IZettleSDK;
-import com.izettle.payments.android.ui.payment.CardPaymentActivity;
-import com.izettle.payments.android.ui.payment.CardPaymentResult;
-import com.izettle.payments.android.ui.readers.CardReadersActivity;
-import com.izettle.payments.android.ui.refunds.RefundResult;
-import com.izettle.payments.android.ui.refunds.RefundsActivity;
+import com.zettle.sdk.feature.cardreader.payment.TippingStyle;
+import com.zettle.sdk.feature.cardreader.payment.TransactionReference;
+import com.zettle.sdk.feature.cardreader.ui.CardReaderAction;
+import com.zettle.sdk.feature.cardreader.ui.payment.CardPaymentResult;
+import com.zettle.sdk.feature.cardreader.ui.readers.CardReadersActivity;
+import com.zettle.sdk.features.ActionUtils;
+import com.zettle.sdk.features.Transaction;
+import com.zettle.sdk.ui.ZettleResult;
+import com.zettle.sdk.ui.ZettleResultKt;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -37,13 +32,13 @@ public class CardReaderActivity extends AppCompatActivity {
 
     private Button chargeButton;
     private Button refundButton;
+    private Button retrieveButton;
     private EditText refundAmountEditText;
     private Button settingsButton;
     private EditText amountEditText;
-    private Button tippingStyleButton;
     private CheckBox installmentsCheckBox;
-    private CheckBox loginCheckBox;
     private MutableLiveData<String> lastPaymentTraceId;
+    private Button tippingStyleButton;
     private TippingStyle tippingStyle = TippingStyle.None;
 
     @Override
@@ -52,23 +47,26 @@ public class CardReaderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_card_reader);
         chargeButton = findViewById(R.id.charge_btn);
         refundButton = findViewById(R.id.refund_btn);
+        retrieveButton = findViewById(R.id.retrieve_btn);
         settingsButton = findViewById(R.id.settings_btn);
         amountEditText = findViewById(R.id.amount_input);
         refundAmountEditText = findViewById(R.id.refund_amount_input);
         tippingStyleButton = findViewById(R.id.tipping_style_btn);
-        loginCheckBox = findViewById(R.id.login_check_box);
         installmentsCheckBox = findViewById(R.id.installments_check_box);
         lastPaymentTraceId = new MutableLiveData<>();
 
-        lastPaymentTraceId.observe(this, value -> refundButton.setEnabled(value != null));
+        lastPaymentTraceId.observe(this, value -> {
+            refundButton.setEnabled(value != null);
+            retrieveButton.setEnabled(value != null);
+        });
 
         chargeButton.setOnClickListener(v -> onChargeClicked());
         refundButton.setOnClickListener(v -> onRefundClicked());
+        retrieveButton.setOnClickListener(v -> onRetrieveClicked());
         settingsButton.setOnClickListener(v -> onSettingsClicked());
         tippingStyleButton.setOnClickListener(v -> onTippingStyleClicked());
 
         setTippingStyleTitle();
-
         getSupportFragmentManager().setFragmentResultListener(TippingStyleBottomSheet.REQUEST_KEY, this, (requestKey, result) -> {
             TippingStyle newTippingStyle = (TippingStyle) result.getSerializable(TippingStyleBottomSheet.TIPPING_STYLE_KEY);
             tippingStyle = newTippingStyle != null ? newTippingStyle : TippingStyle.None;
@@ -78,16 +76,16 @@ public class CardReaderActivity extends AppCompatActivity {
 
     private final ActivityResultLauncher<Intent> paymentLauncher = registerForActivityResult(new StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-            CardPaymentResult parsed = result.getData().getParcelableExtra(CardPaymentActivity.RESULT_EXTRA_PAYLOAD);
-            if (parsed instanceof CardPaymentResult.Completed) {
+            ZettleResult parsed = ZettleResultKt.zettleResult(result.getData());
+            if (parsed instanceof ZettleResult.Completed) {
                 showSnackBar("Payment completed");
                 CardPaymentResult.Completed casted = (CardPaymentResult.Completed) parsed;
                 lastPaymentTraceId.setValue(Objects.requireNonNull(casted.getPayload().getReference()).getId());
                 refundAmountEditText.setText(new SpannableStringBuilder()
                         .append(String.valueOf(casted.getPayload().getAmount())));
-            } else if (parsed instanceof CardPaymentResult.Failed) {
-                showSnackBar("Payment failed " + ((CardPaymentResult.Failed) parsed).getReason());
-            } else if (parsed instanceof CardPaymentResult.Canceled) {
+            } else if (parsed instanceof ZettleResult.Failed) {
+                showSnackBar("Payment failed " + ((ZettleResult.Failed) parsed).getReason());
+            } else if (parsed instanceof ZettleResult.Cancelled) {
                 showSnackBar("Payment canceled");
             }
         }
@@ -95,12 +93,12 @@ public class CardReaderActivity extends AppCompatActivity {
 
     private final ActivityResultLauncher<Intent> refundLauncher = registerForActivityResult(new StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-            RefundResult parsed = result.getData().getParcelableExtra(RefundsActivity.RESULT_EXTRA_PAYLOAD);
-            if (parsed instanceof RefundResult.Completed) {
+            ZettleResult parsed = ZettleResultKt.zettleResult(result.getData());
+            if (parsed instanceof ZettleResult.Completed) {
                 showSnackBar("Refund completed");
-            } else if (parsed instanceof RefundResult.Failed) {
-                showSnackBar("Refund failed " + ((RefundResult.Failed) parsed).getReason());
-            } else if (parsed instanceof RefundResult.Canceled) {
+            } else if (parsed instanceof ZettleResult.Failed) {
+                showSnackBar("Refund failed " + ((ZettleResult.Failed) parsed).getReason());
+            } else if (parsed instanceof ZettleResult.Cancelled) {
                 showSnackBar("Refund canceled");
             }
         }
@@ -117,43 +115,22 @@ public class CardReaderActivity extends AppCompatActivity {
             return;
         }
         String internalTraceId = UUID.randomUUID().toString();
-        long amount = parseLong(amountEditText.getText());
-        TippingStyle tippingStyle = this.tippingStyle;
+        long amount = Utils.parseLong(amountEditText.getText());
         boolean enableInstallments = installmentsCheckBox.isChecked();
-        boolean enableLogin = loginCheckBox.isChecked();
+
         TransactionReference reference = new TransactionReference.Builder(internalTraceId)
                 .put("PAYMENT_EXTRA_INFO", "Started from home screen")
                 .build();
 
-        Intent intent = new CardPaymentActivity.IntentBuilder(this)
-                .amount(amount)
-                .reference(reference)
-                .enableInstalments(enableInstallments)
-                .enableTipping(tippingStyle)
-                .enableLogin(enableLogin)
-                .build();
-
+        CardReaderAction.Payment payment = new CardReaderAction.Payment(
+                reference, amount, tippingStyle, enableInstallments
+        );
+        Intent intent = ActionUtils.charge(payment, this);
         paymentLauncher.launch(intent);
     }
 
     private void onSettingsClicked() {
         startActivity(CardReadersActivity.newIntent(this));
-    }
-
-    private void onRefundClicked() {
-        String internalTraceId = lastPaymentTraceId.getValue();
-        boolean isDevMode = ((MainApplication) getApplication()).isDevMode();
-
-        if (internalTraceId == null && !isDevMode) {
-            showSnackBar("No payment taken");
-            return;
-        }
-
-        Long amount = parseLong(refundAmountEditText.getText());
-        IZettleSDK.Instance.getRefundsManager().retrieveCardPayment(
-                (internalTraceId != null ? internalTraceId : ""),
-                new RefundCallback(amount)
-        );
     }
 
     private void onTippingStyleClicked() {
@@ -165,33 +142,47 @@ public class CardReaderActivity extends AppCompatActivity {
         tippingStyleButton.setText(tippingStyleTitle);
     }
 
-    private class RefundCallback implements RefundsManager.Callback<CardPaymentPayload, RetrieveCardPaymentFailureReason> {
+    private void onRefundClicked() {
+        String internalTraceId = lastPaymentTraceId.getValue();
+        boolean isDevMode = ((MainApplication) getApplication()).isDevMode();
 
-        private final Long amount;
-
-        public RefundCallback(Long amount) {
-            this.amount = amount != null ? amount : 0L;
+        if (internalTraceId == null && !isDevMode) {
+            showSnackBar("No payment taken");
+            return;
         }
 
-        @Override
-        public void onFailure(RetrieveCardPaymentFailureReason reason) {
-            showSnackBar("Refund failed");
-        }
+        Long amount = Utils.parseLong(refundAmountEditText.getText());
 
-        @Override
-        public void onSuccess(CardPaymentPayload payload) {
-            TransactionReference reference = new TransactionReference.Builder(UUID.randomUUID().toString())
-                    .put("REFUND_EXTRA_INFO", "Started from home screen")
-                    .build();
-            Intent intent = new RefundsActivity.IntentBuilder(CardReaderActivity.this)
-                    .cardPayment(payload)
-                    .receiptNumber("#123456")
-                    .taxAmount(amount)
-                    .refundAmount(amount)
-                    .reference(reference)
-                    .build();
+        TransactionReference reference = new TransactionReference.Builder(UUID.randomUUID().toString())
+                .put("REFUND_EXTRA_INFO", "Started from home screen")
+                .build();
 
-            refundLauncher.launch(intent);
-        }
+        CardReaderAction.Refund refund = new CardReaderAction.Refund(
+                reference, amount, internalTraceId, null, null
+        );
+        refundLauncher.launch(ActionUtils.refund(refund,this));
     }
+
+    private void onRetrieveClicked() {
+        String internalTraceId = lastPaymentTraceId.getValue();
+        boolean isDevMode = ((MainApplication) getApplication()).isDevMode();
+
+        if (internalTraceId == null && !isDevMode) {
+            showSnackBar("No payment taken");
+            return;
+        }
+
+        Transaction transaction = new CardReaderAction.Transaction(internalTraceId);
+        ActionUtils.retrieve(transaction, result -> {
+            if (result instanceof ZettleResult.Completed) {
+                showSnackBar("Retrieve payment completed");
+            } else if (result instanceof ZettleResult.Failed) {
+                showSnackBar("Retrieve failed " + ((ZettleResult.Failed) result).getReason());
+            } else if (result instanceof ZettleResult.Cancelled) {
+                showSnackBar("Retrieve canceled");
+            }
+            return null;
+        });
+    }
+
 }

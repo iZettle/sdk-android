@@ -1,4 +1,4 @@
-package com.izettle.payments.android.kotlin_example
+package com.zettle.payments.android.kotlin_example
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.izettle.payments.android.payment.TippingStyle
+import com.zettle.sdk.feature.cardreader.payment.TippingStyle
 
 class TippingStyleBottomSheet : BottomSheetDialogFragment() {
 
@@ -38,7 +38,6 @@ class TippingStyleBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         styleNoneView.setOnClickListener { setResultAndExit(TippingStyle.None) }
         styleDefaultView.setOnClickListener { setResultAndExit(TippingStyle.Default) }
