@@ -1,16 +1,14 @@
-package com.izettle.payments.android.kotlin_example
+package com.zettle.payments.android.kotlin_example
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.izettle.android.commons.ext.state.toLiveData
-import com.izettle.payments.android.sdk.IZettleSDK
-import com.izettle.payments.android.sdk.User.AuthState.LoggedIn
+import com.zettle.sdk.ZettleSDK
+import com.zettle.sdk.core.auth.User
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,16 +28,16 @@ class MainActivity : AppCompatActivity() {
         openCardReaderButton = findViewById(R.id.open_card_reader_btn)
         openPayPalQrcButton = findViewById(R.id.open_paypal_btn)
 
-        IZettleSDK.user.state.toLiveData().observe(this) { state ->
-            onAuthStateChanged(state is LoggedIn)
+        ZettleSDK.instance?.authState?.observe(this) { state ->
+            onAuthStateChanged(state is User.AuthState.LoggedIn)
         }
 
         loginButton.setOnClickListener {
-            IZettleSDK.user.login(this, Color.WHITE)
+            ZettleSDK.instance?.login(this)//, Color.WHITE)
         }
 
         logoutButton.setOnClickListener {
-            IZettleSDK.user.logout()
+            ZettleSDK.instance?.logout()
         }
 
         openCardReaderButton.setOnClickListener {
