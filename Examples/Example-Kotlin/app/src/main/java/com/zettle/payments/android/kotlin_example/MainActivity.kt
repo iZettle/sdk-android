@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var logoutButton: Button
     private lateinit var openCardReaderButton: Button
     private lateinit var openPayPalQrcButton: Button
+    private lateinit var openManualCardEntryButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         logoutButton = findViewById(R.id.logout_btn)
         openCardReaderButton = findViewById(R.id.open_card_reader_btn)
         openPayPalQrcButton = findViewById(R.id.open_paypal_btn)
+        openManualCardEntryButton = findViewById(R.id.open_mce_btn)
 
         ZettleSDK.instance?.authState?.observe(this) { state ->
             onAuthStateChanged(state is User.AuthState.LoggedIn)
@@ -47,6 +49,11 @@ class MainActivity : AppCompatActivity() {
 
         openPayPalQrcButton.setOnClickListener {
             val intent = Intent(this, PayPalQrcActivity::class.java)
+            startActivity(intent)
+        }
+
+        openManualCardEntryButton.setOnClickListener {
+            val intent = Intent(this, ManualCardEntryActivity::class.java)
             startActivity(intent)
         }
     }

@@ -6,6 +6,8 @@ import com.zettle.sdk.feature.qrc.ui.refund.QrcRefund
 import com.zettle.sdk.feature.cardreader.payment.Transaction
 import com.zettle.sdk.feature.cardreader.payment.refunds.CardPaymentPayload
 import com.zettle.sdk.feature.cardreader.payment.refunds.RefundPayload
+import com.zettle.sdk.feature.manualcardentry.ui.payments.models.ManualCardEntryPaymentPayload
+import com.zettle.sdk.feature.manualcardentry.ui.refunds.models.ManualCardEntryRefundPayload
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -41,6 +43,17 @@ fun QrcRefund.toResultListItems(): List<ResultItem> = listOf(
     ResultItem("transactionId", transactionId),
     ResultItem("referenceNumber", referenceNumber),
     ResultItem("Type", type.toString())
+)
+
+fun ManualCardEntryPaymentPayload.toResultListItems(): List<ResultItem> = listOf(
+    ResultItem("transactionId", transactionId),
+    ResultItem("referenceNumber", referenceNumber),
+)
+
+fun ManualCardEntryRefundPayload.toResultListItems(): List<ResultItem> = listOf(
+    ResultItem("originalAmount", formatPaymentAmount(originalAmount)),
+    ResultItem("transactionId", transactionId),
+    ResultItem("referenceNumber", referenceNumber),
 )
 
 fun Transaction.ResultPayload.toResultListItems(): List<ResultItem> = listOf(

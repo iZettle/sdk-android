@@ -32,7 +32,9 @@
         <activity
             android:name=".PayPalQrcActivity"
             android:label="PayPal Qrc" />
-
+        <activity
+            android:name=".ManualCardEntryActivity"
+            android:label="Manual Card Entry" />
         <activity
             android:name="com.izettle.android.auth.OAuthActivity"
             android:launchMode="singleTask"
