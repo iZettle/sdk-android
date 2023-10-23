@@ -11,6 +11,7 @@ import com.zettle.sdk.ZettleSDKLifecycle;
 import com.zettle.sdk.feature.cardreader.ui.CardReaderFeature;
 import com.zettle.sdk.feature.qrc.paypal.PayPalQrcFeature;
 import com.zettle.sdk.feature.qrc.venmo.VenmoQrcFeature;
+import com.zettle.sdk.feature.manualcardentry.ui.ManualCardEntryFeature;
 
 public class MainApplication extends MultiDexApplication {
 
@@ -47,6 +48,7 @@ public class MainApplication extends MultiDexApplication {
         config.addFeature(CardReaderFeature.Configuration);
         config.addFeature(PayPalQrcFeature.Configuration);
         config.addFeature(VenmoQrcFeature.Configuration);
+        config.addFeature(ManualCardEntryFeature.Configuration);
 
         ZettleSDK.configure(config);
         ProcessLifecycleOwner.get().getLifecycle().addObserver(new ZettleSDKLifecycle());

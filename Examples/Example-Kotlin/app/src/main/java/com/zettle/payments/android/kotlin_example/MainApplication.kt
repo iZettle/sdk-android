@@ -8,6 +8,7 @@ import com.zettle.sdk.feature.cardreader.ui.CardReaderFeature
 import com.zettle.sdk.ZettleSDK
 import com.zettle.sdk.ZettleSDKLifecycle
 import com.zettle.sdk.config
+import com.zettle.sdk.feature.manualcardentry.ui.ManualCardEntryFeature
 
 class MainApplication : MultiDexApplication() {
 
@@ -39,6 +40,7 @@ class MainApplication : MultiDexApplication() {
             addFeature(CardReaderFeature)
             addFeature(PayPalQrcFeature)
             addFeature(VenmoQrcFeature)
+            addFeature(ManualCardEntryFeature)
         }
         ZettleSDK.configure(config)
         //ZettleSDK.start()

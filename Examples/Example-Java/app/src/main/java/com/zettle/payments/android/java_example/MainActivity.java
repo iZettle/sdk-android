@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private Button logoutButton;
     private Button openCardReaderButton;
     private Button openPayPalQrcButton;
+    private Button openManualCardEntryButton;
+
 
     @Override
     public void  onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         logoutButton = findViewById(R.id.logout_btn);
         openCardReaderButton = findViewById(R.id.open_card_reader_btn);
         openPayPalQrcButton = findViewById(R.id.open_paypal_btn);
+        openManualCardEntryButton = findViewById(R.id.open_mce_btn);
 
         ZettleSDK zettleSDK = ZettleSDK.Companion.getInstance();
 
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener( v -> zettleSDK.login(this, Color.WHITE));
 
-        logoutButton.setOnClickListener( v -> zettleSDK.logout());
+        logoutButton.setOnClickListener( v -> zettleSDK.logout(null));
 
         openCardReaderButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, CardReaderActivity.class);
@@ -49,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
         openPayPalQrcButton.setOnClickListener( v -> {
             Intent intent = new Intent(this, PayPalQrcActivity.class);
+            startActivity(intent);
+        });
+
+        openManualCardEntryButton.setOnClickListener( v -> {
+            Intent intent = new Intent(this, ManualCardEntryActivity.class);
             startActivity(intent);
         });
     }

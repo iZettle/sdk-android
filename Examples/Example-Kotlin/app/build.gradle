@@ -49,6 +49,7 @@ dependencies {
     implementation "com.zettle.sdk.feature.qrc:core:$zettle_version"
     implementation "com.zettle.sdk.feature.qrc:paypal-ui:$zettle_version"
     implementation "com.zettle.sdk.feature.qrc:venmo-ui:$zettle_version"
+    implementation "com.zettle.sdk.feature.manualcardentry:ui:$zettle_version"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.6.1'
