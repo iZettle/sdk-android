@@ -3,12 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
-    compileSdkVersion 32
+    namespace "com.zettle.payments.android.kotlin_example"
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.zettle.payments.android.kotlin_example"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -49,8 +50,8 @@ dependencies {
     implementation "com.zettle.sdk.feature.qrc:paypal-ui:$zettle_version"
     implementation "com.zettle.sdk.feature.qrc:venmo-ui:$zettle_version"
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.multidex:multidex:2.0.1'

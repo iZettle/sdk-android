@@ -104,8 +104,9 @@ class CardReaderActivity : AppCompatActivity() {
                     val refund : RefundResult.Completed = CardReaderAction.fromRefundResult(result)
                     showResultSheet(refund.payload.toPaymentResultData())
                 }
-                is RefundResult.Canceled -> showSnackBar("Refund canceled")
-                is RefundResult.Failed -> showSnackBar("Refund failed Reason#${result.reason}")
+                is ZettleResult.Cancelled -> showSnackBar("Refund canceled")
+                is ZettleResult.Failed -> showSnackBar("Refund failed Reason#${result.reason}")
+                null -> showSnackBar("Problem... null")
             }
         }
 
