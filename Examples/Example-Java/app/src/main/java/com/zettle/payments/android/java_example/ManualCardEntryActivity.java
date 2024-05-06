@@ -35,6 +35,7 @@ public class ManualCardEntryActivity extends AppCompatActivity {
     private Button chargeButton;
     private Button settingsButton;
     private EditText amountEditText;
+    private EditText bnCodeEditText;
     private Button refundButton;
     private Button retrieveButton;
     private EditText refundAmountEditText;
@@ -47,6 +48,7 @@ public class ManualCardEntryActivity extends AppCompatActivity {
         chargeButton = findViewById(R.id.charge_btn);
         settingsButton = findViewById(R.id.settings_btn);
         amountEditText = findViewById(R.id.amount_input);
+        bnCodeEditText = findViewById(R.id.bn_code_input);
         refundButton = findViewById(R.id.refund_btn);
         retrieveButton = findViewById(R.id.retrieve_btn);
         refundAmountEditText = findViewById(R.id.refund_amount_input);
@@ -95,14 +97,17 @@ public class ManualCardEntryActivity extends AppCompatActivity {
 
     private void onChargeClicked() {
         Long amount = parseLong(amountEditText.getText());
+        String bnCode = bnCodeEditText.getText().toString();
         if (amount == null) {
             showSnackBar("Invalid amount");
             return;
         }
 
+        if (bnCode.isEmpty()) bnCode = null;
+
         String uuid = UUID.randomUUID().toString();
         Intent intent;
-        ManualCardEntryAction.Payment payment = new ManualCardEntryAction.Payment(amount, uuid);
+        ManualCardEntryAction.Payment payment = new ManualCardEntryAction.Payment(amount, uuid, bnCode);
         intent = ActionUtils.charge(payment, this);
         paymentLauncher.launch(intent);
     }
