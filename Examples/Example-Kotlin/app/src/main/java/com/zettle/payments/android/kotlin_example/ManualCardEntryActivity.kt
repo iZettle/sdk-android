@@ -32,6 +32,7 @@ class ManualCardEntryActivity : AppCompatActivity() {
     private lateinit var refundButton: Button
     private lateinit var refundAmountEditText: EditText
     private lateinit var amountEditText: EditText
+    private lateinit var bnCodeEditText: EditText
     private lateinit var lastPaymentTraceId: MutableLiveData<String?>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +48,7 @@ class ManualCardEntryActivity : AppCompatActivity() {
         refundButton = findViewById(R.id.refund_btn)
         refundAmountEditText = findViewById(R.id.refund_amount_input)
         amountEditText = findViewById(R.id.amount_input)
+        bnCodeEditText = findViewById(R.id.bn_code_input)
         lastPaymentTraceId = MutableLiveData()
 
         chargeButton.setOnClickListener { onChargeClicked() }
@@ -137,13 +139,18 @@ class ManualCardEntryActivity : AppCompatActivity() {
 
     private fun onChargeClicked() {
         val amount = amountEditText.text.toLong()
+        val bnCode = bnCodeEditText.text.toString()
         if (amount == null) {
             showSnackBar("Invalid amount")
             return
         }
 
         val uuid = UUID.randomUUID().toString()
-        val intent: Intent = ManualCardEntryAction.Payment(amount, uuid).charge(this)
+
+        val intent: Intent = (if (bnCode == "") ManualCardEntryAction.Payment(
+            amount,
+            uuid
+        ) else ManualCardEntryAction.Payment(amount, uuid, bnCode)).charge(this)
         paymentLauncher.launch(intent)
     }
 

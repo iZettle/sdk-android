@@ -2,7 +2,7 @@
 
 buildscript {
 
-    ext.zettle_version = '2.11.1'
+    ext.zettle_version = '2.15.0'
 
     apply from: 'zettleSDK.gradle'
 
