@@ -2,19 +2,25 @@ package com.zettle.payments.android.kotlin_example
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.SpannableStringBuilder
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
-import com.zettle.sdk.feature.cardreader.payment.TippingStyle
+import com.zettle.sdk.feature.cardreader.payment.PayPalReaderTippingStyle
+import com.zettle.sdk.feature.cardreader.payment.TippingConfiguration
+import com.zettle.sdk.feature.cardreader.payment.TippingPercentageOptions
 import com.zettle.sdk.feature.cardreader.payment.Transaction
 import com.zettle.sdk.feature.cardreader.payment.TransactionReference
+import com.zettle.sdk.feature.cardreader.payment.ZettleReaderTippingStyle
 import com.zettle.sdk.feature.cardreader.payment.refunds.CardPaymentPayload
 import com.zettle.sdk.feature.cardreader.payment.refunds.RefundPayload
 import com.zettle.sdk.feature.cardreader.ui.CardReaderAction
@@ -38,10 +44,18 @@ class CardReaderActivity : AppCompatActivity() {
     private lateinit var refundAmountEditText: EditText
     private lateinit var settingsButton: Button
     private lateinit var amountEditText: EditText
-    private lateinit var tippingStyleButton: Button
     private lateinit var installmentsCheckBox: CheckBox
     private lateinit var lastPaymentTraceId: MutableLiveData<String?>
-    private var tippingStyle: TippingStyle = TippingStyle.None
+
+    private lateinit var selectTippingStyleButton: Button
+    private lateinit var ztrTippingStyleLabel: TextView
+    private lateinit var pprTippingStyleLabel: TextView
+    private lateinit var openPprTippingSettingsButton: Button
+
+    private var tippingConfiguration: TippingConfiguration? = TippingConfiguration(
+        ZettleReaderTippingStyle.None,
+        PayPalReaderTippingStyle.None
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +65,15 @@ class CardReaderActivity : AppCompatActivity() {
         retrieveButton = findViewById(R.id.retrieve_btn)
         settingsButton = findViewById(R.id.settings_btn)
         amountEditText = findViewById(R.id.amount_input)
-        tippingStyleButton = findViewById(R.id.tipping_style_btn)
         refundAmountEditText = findViewById(R.id.refund_amount_input)
         installmentsCheckBox = findViewById(R.id.installments_check_box)
+
+        selectTippingStyleButton = findViewById(R.id.select_tipping_style_btn)
+        selectTippingStyleButton.setOnClickListener { selectTippingStyle() }
+        ztrTippingStyleLabel = findViewById(R.id.ztr_tipping_style_label)
+        pprTippingStyleLabel = findViewById(R.id.ppr_tipping_style_label)
+        openPprTippingSettingsButton = findViewById(R.id.open_ppr_tipping_settings_btn)
+        openPprTippingSettingsButton.setOnClickListener { onTippingSettingsClicked() }
 
         lastPaymentTraceId = MutableLiveData()
         lastPaymentTraceId.observe(this) { value: String? ->
@@ -65,13 +85,8 @@ class CardReaderActivity : AppCompatActivity() {
         refundButton.setOnClickListener { onRefundClicked() }
         retrieveButton.setOnClickListener { onRetrieveClicked() }
         settingsButton.setOnClickListener { onSettingsClicked() }
-        tippingStyleButton.setOnClickListener { onTippingStyleClicked() }
 
         setTippingStyleTitle()
-        supportFragmentManager.setFragmentResultListener(TippingStyleBottomSheet.REQUEST_KEY, this) { _, result ->
-            tippingStyle = result.getSerializable(TippingStyleBottomSheet.TIPPING_STYLE_KEY) as? TippingStyle ?: TippingStyle.None
-            setTippingStyleTitle()
-        }
     }
 
     private val paymentLauncher =
@@ -158,9 +173,10 @@ class CardReaderActivity : AppCompatActivity() {
         val intent: Intent = CardReaderAction.Payment(
             reference = reference,
             amount = amount,
-            tippingStyle = tippingStyle,
+            tippingConfiguration = tippingConfiguration,
             enableInstallments = enableInstallments
         ).charge(this)
+
         paymentLauncher.launch(intent)
     }
 
@@ -209,13 +225,50 @@ class CardReaderActivity : AppCompatActivity() {
         startActivity(CardReaderAction.Settings.show(this))
     }
 
-    private fun onTippingStyleClicked() {
-        TippingStyleBottomSheet.newInstance()
-            .show(supportFragmentManager, TippingStyleBottomSheet::class.java.simpleName)
+    private val selectTippingStyleLauncher =
+        registerForActivityResult(StartActivityForResult()) { result ->
+            if (result.resultCode != Activity.RESULT_OK) {
+                return@registerForActivityResult
+            }
+
+            val data = result.data ?: return@registerForActivityResult
+            data.parcelableExtra<TippingConfiguration>(
+                SelectTippingStyleActivity.TIPPING_CONFIGS_KEY
+            )?.let {
+                tippingConfiguration = it
+                setTippingStyleTitle()
+            }
+        }
+
+    private fun selectTippingStyle() {
+        val intent = Intent(this, SelectTippingStyleActivity::class.java)
+        intent.putExtra(SelectTippingStyleActivity.TIPPING_CONFIGS_KEY, tippingConfiguration)
+        selectTippingStyleLauncher.launch(intent)
     }
 
     private fun setTippingStyleTitle() {
-        val tippingStyleTitle = "Tipping Style - ${tippingStyle.name}"
-        tippingStyleButton.text = tippingStyleTitle
+        tippingConfiguration?.let {
+            ztrTippingStyleLabel.text = "Zettle Reader: ${it.zettleReaderTippingStyle.name}"
+            val pprStyle = when (val style = it.payPalReaderTippingStyle) {
+                is PayPalReaderTippingStyle.PredefinedPercentage -> style.javaClass.simpleName + style.options.displayText()
+                else -> style.javaClass.simpleName
+            }
+            pprTippingStyleLabel.text = "PayPal Reader: $pprStyle"
+        }
     }
+
+    private fun onTippingSettingsClicked() {
+        val intent = CardReaderAction.TippingSettings().show(this)
+        startActivity(intent)
+    }
+
+    private fun TippingPercentageOptions?.displayText() = when (this) {
+        null -> "(Options = Null)"
+        else -> "($option1, $option2, $option3)"
+    }
+}
+
+inline fun <reified T : Parcelable> Intent.parcelableExtra(key: String): T? = when {
+    Build.VERSION.SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
+    else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
 }

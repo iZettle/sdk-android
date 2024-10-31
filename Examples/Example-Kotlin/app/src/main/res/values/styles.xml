@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- Base application theme. -->
@@ -9,4 +10,11 @@
         <item name="colorSurface">@color/colorAccent</item>
     </style>
 
+    <style name="radio_button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingTop">@dimen/grid_1x</item>
+        <item name="android:paddingBottom">@dimen/grid_1x</item>
+        <item name="android:textSize">15sp</item>
+    </style>
 </resources>

@@ -72,16 +72,47 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/tipping_style_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tipping style - None" />
-
-        <Button
             android:id="@+id/charge_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Charge" />
+
+        <!-- Select Tipping Style -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Tipping Style"
+            android:textColor="@color/divider_text"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/divider" />
+
+        <Button
+            android:id="@+id/select_tipping_style_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select tipping style" />
+
+        <TextView
+            android:id="@+id/ztr_tipping_style_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zettle Reader style: None"
+            android:layout_marginTop="12dp"/>
+
+        <TextView
+            android:id="@+id/ppr_tipping_style_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PayPal Reader style: None"
+            android:layout_marginTop="8dp"/>
 
         <!-- Refund -->
 
@@ -176,7 +207,14 @@
             android:id="@+id/settings_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Open settings" />
+            android:text="Reader settings" />
+
+        <Button
+            android:id="@+id/open_ppr_tipping_settings_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="PayPal Reader Tipping settings" />
 
     </LinearLayout>
 </ScrollView>

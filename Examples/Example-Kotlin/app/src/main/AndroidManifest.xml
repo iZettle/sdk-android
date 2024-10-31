@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -12,22 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:fullBackupContent,android:supportsRtl">
-
-        <activity android:name=".StartActivity"
+        <activity
+            android:name=".StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".MainActivity" />
-
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".CardReaderActivity"
             android:label="Card Reader" />
-
         <activity
             android:name=".PayPalQrcActivity"
             android:label="PayPal Qrc" />
@@ -35,10 +32,13 @@
             android:name=".ManualCardEntryActivity"
             android:label="Manual Card Entry" />
         <activity
+            android:name=".SelectTippingStyleActivity"
+            android:label="Select Tipping Style" />
+        <activity
             android:name="com.izettle.android.auth.OAuthActivity"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:taskAffinity="@string/oauth_activity_task_affinity"
-            android:exported="true">
+            android:taskAffinity="@string/oauth_activity_task_affinity">
             <intent-filter>
                 <data
                     android:host="@string/redirect_url_host"
@@ -50,7 +50,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

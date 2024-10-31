@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Zettle Reader tipping setting -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Zettle Reader tipping style"
+            android:textColor="@color/divider_text"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/divider" />
+
+        <RadioGroup
+            android:id="@+id/ztr_tipping_style_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/ztr_tipping_style_none">
+
+            <RadioButton
+                android:id="@+id/ztr_tipping_style_none"
+                style="@style/radio_button"
+                android:contentDescription="None"
+                android:text="None" />
+
+            <RadioButton
+                android:id="@+id/ztr_tipping_style_default"
+                style="@style/radio_button"
+                android:contentDescription="Default"
+                android:text="Default" />
+
+            <RadioButton
+                android:id="@+id/ztr_tipping_style_amount"
+                style="@style/radio_button"
+                android:contentDescription="Amount"
+                android:text="Amount" />
+
+            <RadioButton
+                android:id="@+id/ztr_tipping_style_percentage"
+                style="@style/radio_button"
+                android:contentDescription="Percentage"
+                android:text="Percentage" />
+
+        </RadioGroup>
+
+        <!-- PayPal Reader tipping setting -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="PayPay Reader tipping style"
+            android:textColor="@color/divider_text"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/divider" />
+
+        <RadioGroup
+            android:id="@+id/ppr_tipping_style_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/ppr_tipping_style_none">
+
+            <RadioButton
+                android:id="@+id/ppr_tipping_style_none"
+                style="@style/radio_button"
+                android:contentDescription="None"
+                android:text="None" />
+
+            <RadioButton
+                android:id="@+id/ppr_tipping_style_default"
+                style="@style/radio_button"
+                android:contentDescription="Default"
+                android:text="Default" />
+
+            <RadioButton
+                android:id="@+id/ppr_tipping_style_amount"
+                style="@style/radio_button"
+                android:contentDescription="CustomAmount"
+                android:text="CustomAmount" />
+
+            <RadioButton
+                android:id="@+id/ppr_tipping_style_percentage"
+                style="@style/radio_button"
+                android:contentDescription="PredefinedPercentage"
+                android:text="PredefinedPercentage" />
+
+            <RadioButton
+                android:id="@+id/ppr_tipping_style_sdk_configured"
+                style="@style/radio_button"
+                android:contentDescription="SDKConfigured"
+                android:text="SDKConfigured" />
+        </RadioGroup>
+
+        <!-- PayPal Reader Percent Options section -->
+        <LinearLayout
+            android:id="@+id/section_ppr_percent_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="PayPal Reader percent options"
+                android:textColor="@color/divider_text"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/divider" />
+
+            <RadioGroup
+                android:id="@+id/ppr_percent_options_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkedButton="@+id/ppr_percent_options_custom">
+
+                <RadioButton
+                    android:id="@+id/ppr_percent_options_null"
+                    style="@style/radio_button"
+                    android:contentDescription="Options = null"
+                    android:text="Options = Null" />
+
+                <RadioButton
+                    android:id="@+id/ppr_percent_options_custom"
+                    style="@style/radio_button"
+                    android:contentDescription="Custom"
+                    android:text="Options = (Option1, Option2, Option3)" />
+
+            </RadioGroup>
+
+            <!-- Percentage options -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Option1: "
+                    android:textColor="@color/divider_text"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/ppr_percent_option_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="Option 1"
+                    android:inputType="number"
+                    android:text="5"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Option2: "
+                    android:textColor="@color/divider_text"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/ppr_percent_option_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="Option 2"
+                    android:inputType="number"
+                    android:text="10"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Option3: "
+                    android:textColor="@color/divider_text"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/ppr_percent_option_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:hint="Option 3"
+                    android:inputType="number"
+                    android:text="15"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/save_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_2x"
+            android:text="Save" />
+
+    </LinearLayout>
+</ScrollView>

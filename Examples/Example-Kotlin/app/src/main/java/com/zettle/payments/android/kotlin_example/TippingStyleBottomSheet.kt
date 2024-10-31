@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.zettle.sdk.feature.cardreader.payment.TippingStyle
+import com.zettle.sdk.feature.cardreader.payment.ZettleReaderTippingStyle
 
 class TippingStyleBottomSheet : BottomSheetDialogFragment() {
 
@@ -39,13 +39,13 @@ class TippingStyleBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        styleNoneView.setOnClickListener { setResultAndExit(TippingStyle.None) }
-        styleDefaultView.setOnClickListener { setResultAndExit(TippingStyle.Default) }
-        styleAmountView.setOnClickListener { setResultAndExit(TippingStyle.Amount) }
-        stylePercentView.setOnClickListener { setResultAndExit(TippingStyle.Percentage) }
+        styleNoneView.setOnClickListener { setResultAndExit(ZettleReaderTippingStyle.None) }
+        styleDefaultView.setOnClickListener { setResultAndExit(ZettleReaderTippingStyle.Default) }
+        styleAmountView.setOnClickListener { setResultAndExit(ZettleReaderTippingStyle.Amount) }
+        stylePercentView.setOnClickListener { setResultAndExit(ZettleReaderTippingStyle.Percentage) }
     }
 
-    private fun setResultAndExit(tippingStyle: TippingStyle) {
+    private fun setResultAndExit(tippingStyle: ZettleReaderTippingStyle) {
         setFragmentResult(REQUEST_KEY, Bundle().apply { putSerializable(TIPPING_STYLE_KEY, tippingStyle) })
         dismiss()
     }
