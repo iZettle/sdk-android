@@ -12,13 +12,13 @@ The Android SDK example app is to help you get started with Zettle Payments SDK 
 
 You can use the example to learn about SDK. For example, SDK structure, input data format, and payment and refund payload.
 
-For information about Zettle Payments SDK for Android, see [Android SDK docs on Zettle Developer Portal](https://developer.zettle.com/docs/android-sdk).
+For information about Zettle Payments SDK for Android, see [Android SDK docs on Zettle Developer Portal](https://developer.zettle.com/docs/payment-integrations/android-sdk).
 
 ## Prerequisites
 
 - Developer environment, for example Android studio
 - Android version 5 (API level 21) or higher
-- GitHub personal access token with scope `read:packages`, See [Generate a GitHub token](https://developer.zettle.com/docs/android-sdk/get-started#generate-a-github-token)
+- GitHub personal access token with scope `read:packages`, See [Generate a GitHub token](https://developer.zettle.com/docs/payment-integrations/android-sdk/get-started#generate-a-github-token)
 - Credentials for the app that include a client ID and a redirect URL (callback URL). If you don't have these, see [create credentials for an SDK app](https://developer.zettle.com/docs/get-started/user-guides/create-app-credentials/create-credentials-sdk-app).
 
 ## Step 1: Configure the example app

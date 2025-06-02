@@ -1,5 +1,5 @@
 # About Android SDK documentation
-**Starting May 9, 2022, all the documentation for Android SDK is available on [Zettle Developer Portal](https://developer.zettle.com/docs/android-sdk).**
+**Please check the documentation for Android SDK on [Zettle Developer Portal](https://developer.zettle.com/docs/payment-integrations/android-sdk).**
 
 ## Get help
 
