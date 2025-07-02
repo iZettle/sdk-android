@@ -23,7 +23,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.zettle.sdk.feature.manualcardentry.ui.ManualCardEntryAction;
 import com.zettle.sdk.feature.manualcardentry.ui.payments.ManualCardEntryPaymentResult;
 import com.zettle.sdk.features.ActionUtils;
-import com.zettle.sdk.features.Transaction;
 import com.zettle.sdk.ui.ZettleResult;
 import com.zettle.sdk.ui.ZettleResultKt;
 
@@ -147,7 +146,7 @@ public class ManualCardEntryActivity extends AppCompatActivity {
             internalTraceId = "";
         }
 
-        Transaction transaction = new ManualCardEntryAction.Transaction(internalTraceId);
+        ManualCardEntryAction.Transaction transaction = new ManualCardEntryAction.Transaction(internalTraceId);
 
         ActionUtils.retrieve(transaction, result -> {
             if (result instanceof ZettleResult.Completed) {

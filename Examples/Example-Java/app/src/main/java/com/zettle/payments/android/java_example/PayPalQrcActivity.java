@@ -21,7 +21,7 @@ import com.zettle.sdk.feature.qrc.paypal.PayPalQrcAction;
 import com.zettle.sdk.feature.qrc.ui.payment.QrcPaymentResult;
 import com.zettle.sdk.feature.qrc.venmo.VenmoQrcAction;
 import com.zettle.sdk.features.ActionUtils;
-import com.zettle.sdk.features.Transaction;
+import com.zettle.sdk.features.Headless;
 import com.zettle.sdk.ui.ZettleResult;
 import com.zettle.sdk.ui.ZettleResultKt;
 
@@ -154,7 +154,7 @@ public class PayPalQrcActivity extends AppCompatActivity {
             internalTraceId = "";
         }
 
-        Transaction transaction;
+        Headless transaction;
         if(venmoCheckBox.isChecked()) {
             transaction = new VenmoQrcAction.Transaction(internalTraceId);
         }

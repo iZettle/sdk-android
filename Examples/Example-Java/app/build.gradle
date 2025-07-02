@@ -2,20 +2,22 @@ apply plugin: 'com.android.application'
 
 android {
     namespace "com.zettle.payments.android.java_example"
-    compileSdk 33
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.zettle.payments.android.java_example"
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
     }
-
     packagingOptions {
-        exclude 'META-INF/*.kotlin_module'
+        resources {
+            excludes += ['META-INF/*.kotlin_module']
+        }
     }
+
 
     buildTypes {
 
@@ -32,8 +34,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_14
+        targetCompatibility JavaVersion.VERSION_14
     }
 }
 
@@ -45,10 +47,10 @@ dependencies {
     implementation "com.zettle.sdk.feature.qrc:venmo-ui:$zettle_version"
     implementation "com.zettle.sdk.feature.manualcardentry:ui:$zettle_version"
 
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.lifecycle:lifecycle-process:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-process:2.9.1'
 }

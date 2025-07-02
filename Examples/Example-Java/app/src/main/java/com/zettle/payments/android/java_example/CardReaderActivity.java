@@ -21,7 +21,6 @@ import com.zettle.sdk.feature.cardreader.ui.CardReaderAction;
 import com.zettle.sdk.feature.cardreader.ui.payment.CardPaymentResult;
 import com.zettle.sdk.feature.cardreader.ui.readers.CardReadersActivity;
 import com.zettle.sdk.features.ActionUtils;
-import com.zettle.sdk.features.Transaction;
 import com.zettle.sdk.ui.ZettleResult;
 import com.zettle.sdk.ui.ZettleResultKt;
 
@@ -172,7 +171,7 @@ public class CardReaderActivity extends AppCompatActivity {
             return;
         }
 
-        Transaction transaction = new CardReaderAction.Transaction(internalTraceId);
+        CardReaderAction.Transaction transaction = new CardReaderAction.Transaction(internalTraceId);
         ActionUtils.retrieve(transaction, result -> {
             if (result instanceof ZettleResult.Completed) {
                 showSnackBar("Retrieve payment completed");
