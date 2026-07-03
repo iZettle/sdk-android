@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.zettle.payments.android.kotlin_example"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdk 36
         versionCode 1
         versionName "1.0"
