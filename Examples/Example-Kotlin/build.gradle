@@ -3,7 +3,7 @@
 buildscript {
 
     ext.kotlin_version = '2.2.20'
-    ext.zettle_version = '2.42.5'
+    ext.zettle_version = '2.52.0'
 
     apply from: 'zettleSDK.gradle'
 
