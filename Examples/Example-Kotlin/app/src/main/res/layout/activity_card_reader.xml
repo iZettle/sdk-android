@@ -77,6 +77,20 @@
             android:layout_height="wrap_content"
             android:text="Charge" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/processing_strategy_spinner"
+            android:text="Processing strategy"
+            android:textColor="@color/divider_text"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/processing_strategy_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:spinnerMode="dropdown" />
+
         <!-- Select Tipping Style -->
 
         <TextView

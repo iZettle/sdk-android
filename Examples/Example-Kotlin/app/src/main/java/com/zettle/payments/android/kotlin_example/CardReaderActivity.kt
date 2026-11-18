@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.SpannableStringBuilder
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +27,7 @@ import com.zettle.sdk.feature.cardreader.payment.refunds.CardPaymentPayload
 import com.zettle.sdk.feature.cardreader.payment.refunds.RefundPayload
 import com.zettle.sdk.feature.cardreader.ui.CardReaderAction
 import com.zettle.sdk.feature.cardreader.ui.RetrieveResult
+import com.zettle.sdk.feature.cardreader.ui.ZettlePaymentProcessingStrategy
 import com.zettle.sdk.feature.cardreader.ui.payment.CardPaymentResult
 import com.zettle.sdk.feature.cardreader.ui.refunds.RefundResult
 import com.zettle.sdk.features.charge
@@ -45,6 +48,7 @@ class CardReaderActivity : AppCompatActivity() {
     private lateinit var settingsButton: Button
     private lateinit var amountEditText: EditText
     private lateinit var installmentsCheckBox: CheckBox
+    private lateinit var processingStrategySpinner: Spinner
     private lateinit var lastPaymentTraceId: MutableLiveData<String?>
 
     private lateinit var selectTippingStyleButton: Button
@@ -67,6 +71,15 @@ class CardReaderActivity : AppCompatActivity() {
         amountEditText = findViewById(R.id.amount_input)
         refundAmountEditText = findViewById(R.id.refund_amount_input)
         installmentsCheckBox = findViewById(R.id.installments_check_box)
+        processingStrategySpinner = findViewById(R.id.processing_strategy_spinner)
+        processingStrategySpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            ZettlePaymentProcessingStrategy.entries
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        processingStrategySpinner.setSelection(ZettlePaymentProcessingStrategy.OnlineOnly.ordinal)
 
         selectTippingStyleButton = findViewById(R.id.select_tipping_style_btn)
         selectTippingStyleButton.setOnClickListener { selectTippingStyle() }
@@ -174,7 +187,8 @@ class CardReaderActivity : AppCompatActivity() {
             reference = reference,
             amount = amount,
             tippingConfiguration = tippingConfiguration,
-            enableInstallments = enableInstallments
+            enableInstallments = enableInstallments,
+            processingStrategy = processingStrategySpinner.selectedItem as ZettlePaymentProcessingStrategy
         ).charge(this)
 
         paymentLauncher.launch(intent)
